@@ -1,0 +1,79 @@
+<div class="container">
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <label>Import data:</label>
+                </td>
+                <td>
+                    <input type="file" class="custom-file-input" accept=".csv" value="IMPORT CSV" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" class="button-14" value="POPULATE" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <label>Date from:</label>
+                    <input type="date" id="from" value="2018-01-01" placeholder="To" min="2018-01-01"
+                        max="2021-12-31" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Date to:</label>
+                    <input type="date" id="to" value="2018-01-01" placeholder="To" min="2018-01-01" max="2021-12-31" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" class="button-14" value="TRAIN" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <label>Import model:</label>
+                    <input type="file" class="custom-file-input" accept=".csv" value="IMPORT CSV" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Date from:</label>
+                    <input type="date" id="from" value="2018-01-01" placeholder="To" min="2018-01-01"
+                        max="2021-12-31" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Number of days:</label>
+                    <select id="numofdays" class="number">
+                        <option value="7">7</option>
+                        <option value="6">6</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" class="button-14" value="PREDICT" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
