@@ -1,0 +1,29 @@
+input[type="range"] {
+    appearance: slider-vertical;
+    width: 50px;
+}
+
+.wrapper {
+    border: 1px solid blue;
+}
+.div1 {
+    display: inline-block;
+    width:350px;
+    height:350px;
+    border: 1px solid red;
+}
+.div2 {
+    display: inline-block;
+    width:350px;
+    height:350px;
+    border: 1px solid green;
+}
+
+.edit-button {
+    border: 0;
+    background: transparent;
+}
+
+.edit-button:hover {
+    color: red;
+}

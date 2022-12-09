@@ -7,13 +7,23 @@ import { OptimizationComponent } from './optimization/optimization.component';
 import { HomeComponent } from './home/home.component';
 import * as echarts from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { PopulateComponent } from './forecast/populate/populate.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CoalGeneratorsComponent } from './optimization/coal-generators/coal-generators.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ForecastComponent,
     OptimizationComponent,
-    HomeComponent
+    HomeComponent,
+    PopulateComponent,
+    CoalGeneratorsComponent
   ],
   imports: [
     BrowserModule,
@@ -21,6 +31,12 @@ import { NgxEchartsModule } from 'ngx-echarts';
     NgxEchartsModule.forRoot({
       echarts
     }),
+    NgxSliderModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

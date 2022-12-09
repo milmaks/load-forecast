@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">    
+
+<div class="wrapper">
+    <div echarts (chartInit)="onFuelToPowerChartReady($event)" [options]="optionsChart1" class="div1" style="height: 350px; width: 350px;"></div>
+    <div echarts (chartInit)="onPriceToTonChartReady($event)" [options]="optionsChart2" class="div2" style="height: 350px; width: 350px;"></div>
+    <div echarts (chartInit)="onTonToPowerChartReady($event)" [options]="optionsChart3" class="div2" style="height: 350px; width: 350px;"></div>
+</div>
+
+<div class="wrapper">
+    <div class="col-2" class="div1" style="height: 250px; margin-left: 65px;">
+        <form [formGroup]="chart1">
+            <input type="range" min="0" max="1" step="0.05" formControlName="value0" (change)="changeValueChart1(0, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value1" (change)="changeValueChart1(1, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value2" (change)="changeValueChart1(2, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value3" (change)="changeValueChart1(3, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value4" (change)="changeValueChart1(4, $event)" list="tickmarks"/>
+        </form>
+        <select (change)="functionTypeChanged1($event)">
+            <option value="true">Quadratic</option>
+            <option value="false">Linear</option>
+        </select>
+    </div>
+    <div class="col-2" class="div2" style="height: 250px;">
+        <form [formGroup]="chart2">
+            <input type="range" min="0" max="1" step="0.05" formControlName="value0" (change)="changeValueChart2(0, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value1" (change)="changeValueChart2(1, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value2" (change)="changeValueChart2(2, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value3" (change)="changeValueChart2(3, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value4" (change)="changeValueChart2(4, $event)" list="tickmarks"/>
+        </form>
+        <select (change)="functionTypeChanged2($event)">
+            <option value="true">Quadratic</option>
+            <option value="false">Linear</option>
+        </select>
+    </div>
+    <div class="col-2" class="div2" style="height: 250px;">
+        <form [formGroup]="chart3">
+            <input type="range" min="0" max="1" step="0.05" formControlName="value0" (change)="changeValueChart3(0, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value1" (change)="changeValueChart3(1, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value2" (change)="changeValueChart3(2, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value3" (change)="changeValueChart3(3, $event)" list="tickmarks"/>
+            <input type="range" min="0" max="1" step="0.05" formControlName="value4" (change)="changeValueChart3(4, $event)" list="tickmarks"/>
+        </form>
+        <select (change)="functionTypeChanged3($event)">
+            <option value="true">Quadratic</option>
+            <option value="false">Linear</option>
+        </select>
+    </div>
+</div>
+<div class="wrapper">
+    <div class="div1">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <label for="power">Power output:&nbsp;</label>
+                        <input id="power" type="number" min="0"/>MW
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="co2">CO2 otuput:&nbsp;</label>
+                        <input id="co2" type="number" min="0"/>t
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="fuel">Coal price:&nbsp;</label>
+                        <input id="fuel" type="number" min="0"/>$ per t
+                    </td>
+                </tr>
+                <tr>
+                    <button>ADD NEW COAL POWERPLANT</button>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div2">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>               
+                    <th>
+                        Power
+                    </th>                
+                    <th>
+                        CO2 output
+                    </th>                
+                    <th>
+                        Coal price
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let powerPlant of powerPlantsList">
+                    <td>
+                        {{powerPlant.name}}
+                    </td>
+                    <td>
+                        {{powerPlant.power}}
+                    </td>               
+                    <td>
+                        {{powerPlant.co2}}
+                    </td>            
+                    <td>
+                        {{powerPlant.fuelPrice}}
+                    </td>
+                    <td>
+                        <button type="button" class="edit-button"><span class="bi bi-pencil"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<datalist id="tickmarks">
+    <option value="0" label="0"></option>
+    <option value="0.1" label="0.1"></option>
+    <option value="0.2" label="0.2"></option>
+    <option value="0.3" label="0.3"></option>
+    <option value="0.4" label="0.4"></option>
+    <option value="0.5" label="0.5"></option>
+    <option value="0.6" label="0.6"></option>
+    <option value="0.7" label="0.7"></option>
+    <option value="0.8" label="0.8"></option>
+    <option value="0.9" label="0.9"></option>
+    <option value="1" label="1"></option>
+</datalist>

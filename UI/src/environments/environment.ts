@@ -3,6 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  forecastServerURL:"http://127.0.0.1:5000",
+  allowedDomains:['127.0.0.1:5000'],
   production: false
 };
 

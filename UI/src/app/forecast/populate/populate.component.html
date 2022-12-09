@@ -1,0 +1,24 @@
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <label>Import data:</label>
+            </td>
+            <td>
+                <input type="file" class="custom-file-input" accept=".xlsx" value="IMPORT CSV" (change)="hasUpload($event)"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ng-container *ngFor="let file of files">
+                    <li>{{file.name}}</li>
+                </ng-container>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" class="button-14" value="POPULATE" (click)="uploadFiles()"/>
+            </td>
+        </tr>
+    </tbody>
+</table>
