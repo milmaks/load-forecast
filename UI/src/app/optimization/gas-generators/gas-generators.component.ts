@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
-import type { EChartsOption, LinesSeriesOption, SeriesOption } from 'echarts';
-import * as util from 'zrender/lib/core/util';
-import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CoalPowerPlant } from 'src/app/types';
+import { EChartsOption, util } from 'echarts';
+import { GasPowerPlant } from 'src/app/types';
 
 const SymbolSize = 20;
 const cfuelToPower = [
@@ -52,14 +50,13 @@ let tonToPower = [
   [1, 1],
 ]
 
-
 @Component({
-  selector: 'app-coal-generators',
-  templateUrl: './coal-generators.component.html',
-  styleUrls: ['./coal-generators.component.css']
+  selector: 'app-gas-generators',
+  templateUrl: './gas-generators.component.html',
+  styleUrls: ['./gas-generators.component.css']
 })
-export class CoalGeneratorsComponent {
-  @Input() powerPlantsList: CoalPowerPlant[] = [];
+export class GasGeneratorsComponent {
+  @Input() powerPlantsList: GasPowerPlant[] = [];
 
   panelOpenState = false;
 
@@ -460,7 +457,7 @@ export class CoalGeneratorsComponent {
   addNewGenerator() {
     if(this.powerPlant.valid)
     {
-      let gen: CoalPowerPlant = {
+      let gen: GasPowerPlant = {
         id: this.powerPlantsList.length,
         name: this.powerPlant.controls.name.value!,
         power: this.powerPlant.controls.power.value!,
@@ -505,5 +502,4 @@ export class CoalGeneratorsComponent {
     this.chart2.reset(this.priceToTonRatioChart);
     this.chart3.reset(this.tonToPowerRatioChart);
   }
-
 }

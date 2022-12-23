@@ -2,6 +2,7 @@ import os
 from flask import Flask, flash, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
+from ann.model_creator import ModelCreator
 
 from preprocessing.data_preprocessor import DataPreprocessor
 
@@ -14,6 +15,7 @@ CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 data_preprocessor = DataPreprocessor(UPLOAD_FOLDER)
+model_creator = ModelCreator()
 
 @app.route("/")
 def main():
@@ -40,6 +42,17 @@ def upload_file():
 
             data_preprocessor.process_data(file.filename)
             return {"data": "OK"}, 200
+
+@app.route('/api/train', methods=['POST'])
+def model_training():
+    if request.method == 'POST':
+        model_creator.start_model_training()
+
+@app.route('/api/test')
+def test():
+    data_preprocessor.calculate_daylight('2022-12-15T12:00:00')
+    return {"data": "OK"}, 200
+
     
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                Coal generators
+                Gas generators
             </mat-panel-title>
             <!-- <mat-panel-description>
            &nbsp;&nbsp;&nbsp;{{panelOpenState ? 'skloni' : 'prikaži'}} polja za izmenu    
@@ -101,12 +101,12 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="fuel">Coal price:&nbsp;</label>
+                                    <label for="fuel">Gas price:&nbsp;</label>
                                     <input id="fuel" type="number" min="0" formControlName="fuel"/>$ per t
                                 </td>
                             </tr>
                             <tr>
-                                <button (click)="addNewGenerator()">ADD NEW COAL POWERPLANT</button>
+                                <button (click)="addNewGenerator()">ADD NEW GAS POWERPLANT</button>
                             </tr>
                         </tbody>
                     </table>
@@ -126,7 +126,7 @@
                                 CO2 output
                             </th>
                             <th>
-                                Coal price
+                                Gas price
                             </th>
                             <th>
                                 &nbsp;

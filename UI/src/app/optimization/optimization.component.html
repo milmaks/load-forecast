@@ -1,2 +1,22 @@
-
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <label>Import model:</label>
+            </td>
+            <td>
+                <input type="file" class="custom-file-input" accept=".xlsx" value="IMPORT CSV" (change)="hasUpload($event)"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ng-container *ngFor="let file of files">
+                    <li>{{file.name}}</li>
+                </ng-container>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <app-coal-generators [powerPlantsList]="coalPowerPlants"></app-coal-generators>
+<app-gas-generators [powerPlantsList]="gasPowerPlants"></app-gas-generators>
+<app-solar-generators></app-solar-generators>

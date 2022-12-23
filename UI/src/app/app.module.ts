@@ -14,6 +14,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoalGeneratorsComponent } from './optimization/coal-generators/coal-generators.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { GasGeneratorsComponent } from './optimization/gas-generators/gas-generators.component';
+import { SolarGeneratorsComponent } from './optimization/solar-generators/solar-generators.component';
+import { TrainComponent } from './forecast/train/train.component';
 
 
 @NgModule({
@@ -23,7 +27,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     OptimizationComponent,
     HomeComponent,
     PopulateComponent,
-    CoalGeneratorsComponent
+    CoalGeneratorsComponent,
+    GasGeneratorsComponent,
+    SolarGeneratorsComponent,
+    TrainComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +43,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
