@@ -18,6 +18,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { GasGeneratorsComponent } from './optimization/gas-generators/gas-generators.component';
 import { SolarGeneratorsComponent } from './optimization/solar-generators/solar-generators.component';
 import { TrainComponent } from './forecast/train/train.component';
+import { WindGeneratorsComponent } from './optimization/wind-generators/wind-generators.component';
+import { HydroGeneratorsComponent } from './optimization/hydro-generators/hydro-generators.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { TrainComponent } from './forecast/train/train.component';
     CoalGeneratorsComponent,
     GasGeneratorsComponent,
     SolarGeneratorsComponent,
-    TrainComponent
+    TrainComponent,
+    WindGeneratorsComponent,
+    HydroGeneratorsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,32 @@
+.wrapper {
+    border: 0;
+}
+.div1 {
+    display: inline-block;
+    width:350px;
+    height:350px;
+}
+.div2 {
+    display: inline-block;
+    width:350px;
+    height:350px;
+}
+
+.edit-button {
+    border: 0;
+    background: transparent;
+}
+
+.edit-button:hover {
+    color: red;
+}
+
+.img {
+    box-shadow: none;
+    display: block;
+    margin-right: 100;
+}
+
+/* ::ng-deep .mat-expansion-panel-body {
+    text-align: center;
+  } */

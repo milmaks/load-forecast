@@ -26,6 +26,27 @@ export interface GasPowerPlant {
     Co2ToPowerCurveQuadratic: boolean;
 }
 
+export interface SolarPowerPlant {
+    id: number;
+    name: string;
+    tiltAngle: number;
+    area: number;
+    efficiency: number;
+}
+
+export interface WindPowerPlant {
+    id: number;
+    name: string;
+    numOfTurbines: number;
+    bladeLength: number;
+}
+
+export interface HydroPowerPlant {
+    id: number;
+    name: string;
+    power: number;
+}
+
 export interface TrainingDates {
     dateFrom: string;
     dateTo: string;

@@ -2,7 +2,7 @@
     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                Solar generators
+                Wind generators
             </mat-panel-title>
             <!-- <mat-panel-description>
            &nbsp;&nbsp;&nbsp;{{panelOpenState ? 'skloni' : 'prikaži'}} polja za izmenu    
@@ -11,7 +11,7 @@
 
         <div class="wrapper">
             <div class="div1">
-                <img src="assets/images.png" class="img"/>
+                <img src="assets/wind_farm.jpg" class="img" width="300" height="200"/>
             </div>
             <div class="div2">
                 <form [formGroup]="powerPlant">
@@ -28,23 +28,23 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="tilt-angle">Tilt angle: </label>
+                                    <label for="numOfTurbines">Numer of turbines: </label>
                                     
                                 </td>
                                 <td>
-                                    <input id="tilt-angle" type="number" min="0" max="90" style="width: 100px;" formControlName="tiltAngle">
+                                    <input id="numOfTurbines" type="number" min="0" style="width: 100px;" formControlName="numOfTurbines">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="area">Area: </label>
+                                    <label for="area">Blade length: </label>
                                     
                                 </td>
                                 <td>
-                                    <input type="number" min="0" style="width: 100px;" formControlName="area">
+                                    <input type="number" min="0" style="width: 100px;" formControlName="bladeLength">
                                 </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td>
                                     <label for="efficiency">Efficiency: </label>
                                     
@@ -52,10 +52,10 @@
                                 <td>
                                     <input type="number" min="0" style="width: 100px;" formControlName="efficiency">
                                 </td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <td colspan="2">
-                                    <button (click)="addNewGenerator()">ADD NEW SOLAR POWERPLANT</button>
+                                    <button (click)="addNewGenerator()">ADD NEW WIND POWERPLANT</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -70,13 +70,10 @@
                                 Name
                             </th>
                             <th>
-                                Tilt angle
+                                Numer of turbines
                             </th>
                             <th>
-                                Area
-                            </th>
-                            <th>
-                                Efficiency
+                                Blade length
                             </th>
                             <th>
                                 &nbsp;
@@ -89,13 +86,10 @@
                                 {{powerPlant.name}}
                             </td>
                             <td>
-                                {{powerPlant.tiltAngle}}
+                                {{powerPlant.numOfTurbines}}
                             </td>
                             <td>
-                                {{powerPlant.area}}
-                            </td>
-                            <td>
-                                {{powerPlant.efficiency}}
+                                {{powerPlant.bladeLength}}
                             </td>
                             <td>
                                 <button type="button" class="edit-button" (click)="removePowerPlant(i)"><span class="bi bi-trash"></span></button>

@@ -471,7 +471,7 @@ export class GasGeneratorsComponent {
         Co2ToPowerCurveQuadratic: this.smoothCurveChart3,
       }
 
-      console.log(gen);
+      //console.log(gen);
 
       this.powerPlantsList.push(gen);
 

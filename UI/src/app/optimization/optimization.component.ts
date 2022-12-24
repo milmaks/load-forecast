@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CoalPowerPlant, GasPowerPlant } from '../types';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { CoalPowerPlant, GasPowerPlant, HydroPowerPlant, SolarPowerPlant, WindPowerPlant } from '../types';
 
 @Component({
   selector: 'app-optimization',
@@ -71,10 +73,34 @@ export class OptimizationComponent implements OnInit {
     priceToPowerCurveQuadratic: true
   }
 
+  solarPowerPlant: SolarPowerPlant = {
+    id: 0,
+    name: 'S1',
+    tiltAngle: 45,
+    area: 250,
+    efficiency: 18
+  }
+
+  windPowerPlant: WindPowerPlant = {
+    id: 0,
+    name: 'W1',
+    numOfTurbines: 10,
+    bladeLength: 100
+  }
+
+  hydroPowerPlant: HydroPowerPlant = {
+    id: 0,
+    name: 'H1',
+    power: 200
+  }
+
   coalPowerPlants: CoalPowerPlant[] = [this.coalPowerPlant];
   gasPowerPlants: GasPowerPlant[] = [this.gasPowerPlant];
+  solarPowerPlants: SolarPowerPlant[] = [this.solarPowerPlant];
+  windPowerPlants: WindPowerPlant[] = [this.windPowerPlant];
+  hydroPowerPlants: HydroPowerPlant[] = [this.hydroPowerPlant];
 
-  constructor() { }
+  constructor(private toastr: ToastrService) { }
 
   files:File[] = [];
 
@@ -85,5 +111,27 @@ export class OptimizationComponent implements OnInit {
   ngOnInit(): void {
     
   }
+
+  powerPlants = new FormGroup({
+    coal: new FormControl(50, Validators.required),
+    gas: new FormControl(20, Validators.required),
+    solar: new FormControl(10, Validators.required),
+    wind: new FormControl(10, Validators.required),
+    hydro: new FormControl(10, Validators.required),
+  });
   
+  optimize() {
+    if(this.powerPlants.valid) {
+      let coal = this.powerPlants.controls.coal.value!;
+      let gas = this.powerPlants.controls.gas.value!;
+      let solar = this.powerPlants.controls.solar.value!;
+      let wind = this.powerPlants.controls.wind.value!;
+      let hydro = this.powerPlants.controls.hydro.value!;
+
+      if(coal + gas + solar + wind + hydro != 100) {
+        this.toastr.error("Sum of optimization parameters must be 100%");
+        return;
+      }
+    }
+  }
 }

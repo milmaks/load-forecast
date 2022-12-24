@@ -19,4 +19,73 @@
 </table>
 <app-coal-generators [powerPlantsList]="coalPowerPlants"></app-coal-generators>
 <app-gas-generators [powerPlantsList]="gasPowerPlants"></app-gas-generators>
-<app-solar-generators></app-solar-generators>
+<app-solar-generators [powerPlantsList]="solarPowerPlants"></app-solar-generators>
+<app-wind-generators [powerPlantsList]="windPowerPlants"></app-wind-generators>
+<app-hydro-generators [powerPlantsList]="hydroPowerPlants"></app-hydro-generators>
+
+<div class="wrapper">
+    <div class="div1">
+        <form [formGroup]="powerPlants">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="coal">Power from coal power plants: </label>
+                        </td>
+                        <td>
+                            <input id="coal" formControlName="coal" type="number" min="0" max="100">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="gas">Power from gas power plants: </label>
+                        </td>
+                        <td>
+                            <input id="gas" formControlName="gas" type="number" min="0" max="100">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="solar">Power from solar power plants:</label>
+                        </td>
+                        <td>
+                            <input id="solar" formControlName="solar" type="number" min="0" max="100">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="wind">Power from wind power plants:</label>
+                        </td>
+                        <td>
+                            <input id="wind" formControlName="wind" type="number" min="0" max="100">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="hydro">Power from hydro power plants:</label>
+                        </td>
+                        <td>
+                            <input id="hydro" formControlName="hydro" type="number" min="0" max="100">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button (click)="optimize()">OPTIMIZE</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="div2">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        REZ
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
