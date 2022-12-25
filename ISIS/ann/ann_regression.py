@@ -4,7 +4,7 @@ from keras.models import Sequential
 from tensorflow import keras
 from ann.ann_base import AnnBase
 
-MODEL_NAME = 'models/current_model_3'
+MODEL_NAME = 'models/current_model_4'
 
 class AnnRegression(AnnBase):
     def get_model(self):

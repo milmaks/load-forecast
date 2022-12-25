@@ -13,11 +13,11 @@ class ModelCreator:
     def __init__(self):
         self.database = DataBase()
 
-    def start_model_training(self):
-        self.dataframe = self.load_data()
+    def start_model_training(self, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo):
+        self.dataframe = self.load_data(yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo)
         self.preparer = CustomPreparer(self.dataframe, NUMBER_OF_COLUMNS, SHARE_FOR_TRAINING)
         trainX, trainY, testX, testY = self.prepare_data()
-
+        
         # make predictions
         ann_regression = AnnRegression()
         time_begin = time.time()
@@ -34,9 +34,9 @@ class ModelCreator:
 
 
 
-    def load_data(self):
+    def load_data(self, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo):
         print("Load data started", datetime.now())
-        dataframe = self.database.get_pandas_dataframe()
+        dataframe = self.database.get_pandas_dataframe(yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo)
         print("Load data finished", datetime.now())
         return dataframe
 

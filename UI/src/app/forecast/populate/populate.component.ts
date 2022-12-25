@@ -14,7 +14,10 @@ export class PopulateComponent {
   constructor(private service: ForecastService, private toastr: ToastrService) {}
 
   hasUpload(event:any){
-    this.files.push(event.target.files[0]);
+    for (let index = 0; index < event.target.files.length; index++) {
+      this.files.push(event.target.files[index.toString()]);
+    }
+  
   }
 
   uploadFiles() {
@@ -25,10 +28,11 @@ export class PopulateComponent {
       return;
     }
 
+    formData.append('filesLength', this.files.length.toString());
+    let index = 0;
     this.files.forEach(file => {
-      console.log(file);
-      
-      formData.append('file', <File>file, file.name);
+      formData.append('file[' + index.toString() + ']', <File>file, file.name);
+      index++;
     });
 
     this.service.uploadFiles(formData).subscribe({

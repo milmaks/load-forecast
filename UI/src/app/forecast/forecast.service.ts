@@ -14,7 +14,7 @@ export class ForecastService {
     return this.http.post<FormData>(environment.forecastServerURL + '/api/populate', formData);
   }
 
-  trainModel(trainingDates: TrainingDates){
-    return this.http.post<FormData>(environment.forecastServerURL + '/api/train', trainingDates);
+  trainModel(formData: FormData){
+    return this.http.post<FormData>(environment.forecastServerURL + '/api/train', formData);
   }
 }

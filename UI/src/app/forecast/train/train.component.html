@@ -1,22 +1,24 @@
-<table>
-    <tbody>
-        <tr>
-            <td>
-                <label>Date from:</label>
-                <input type="date" id="from" value="2018-01-01" placeholder="To" min="2018-01-01"
-                    max="2021-12-31" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Date to:</label>
-                <input type="date" id="to" value="2018-01-01" placeholder="To" min="2018-01-01" max="2021-12-31" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" class="button-14" value="TRAIN" (click)="trainModel()"/>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<form [formGroup]="dates">
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <label>Date from:</label>
+                    <input type="date" id="dateFrom" value="2018-01-01" min="2018-01-01"
+                        max="2021-12-31" formControlName="dateFrom"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Date to:</label>
+                    <input type="date" id="dateTo" value="2018-01-01" min="2018-01-01" max="2021-12-31" formControlName="dateTo"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="button-14" (click)="trainModel()">TRAIN</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
