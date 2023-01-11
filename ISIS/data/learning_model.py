@@ -8,7 +8,6 @@ class LearningModel():
     humidity = None 
     wind_speed = None
     cloud_cover = None 
-    #solar_radiation = None 
     week_day = None 
     daylight = None 
     load = None
@@ -24,7 +23,6 @@ class LearningModel():
         self.humidity = humidity 
         self.wind_speed = wind_speed
         self.cloud_cover = cloud_cover 
-        #self.solar_radiation = solar_radiation 
         self.week_day = week_day 
         self.daylight = daylight 
         self.load = load

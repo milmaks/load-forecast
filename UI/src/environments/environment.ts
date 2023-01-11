@@ -4,7 +4,8 @@
 
 export const environment = {
   forecastServerURL:"http://127.0.0.1:5000",
-  allowedDomains:['127.0.0.1:5000'],
+  optimizationServerURL:"http://127.0.0.1:5001",
+  allowedDomains:['127.0.0.1:5000', '127.0.0.1:5001'],
   production: false
 };
 

@@ -40,6 +40,10 @@ class DataBase:
         #cursor.execute('DELETE FROM dbo.AverageLoadInput WHERE 1=1')
         #cursor.execute('SELECT TOP(5) * FROM dbo.ModelLearningData')
         # cursor.execute('SELECT TOP(5) * FROM dbo.AverageLoad')
+        # cursor.execute('SELECT TOP(5) * FROM dbo.ModelLearningDataInput')
+        # for row in cursor:
+        #     print(row)
+        # cursor.execute('SELECT TOP(5) * FROM dbo.AverageLoadInput')
         # for row in cursor:
         #     print(row)
         database_con.commit()
@@ -86,15 +90,46 @@ class DataBase:
         cursor.close()
         database_con.close()
 
-    def get_pandas_dataframe(self, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo):
+    def get_pandas_dataframe(self, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo, learningData):
         database_con = self.connect()
         cursor = database_con.cursor()
         #rows = cursor.execute('SELECT * FROM dbo.ModelLearningData')
-        sql = 'SELECT * FROM dbo.GetScaledModelLearningData({},{},{},{},{},{})'.format(
-            yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo
-        )
+        if learningData == True:
+            sql = 'SELECT * FROM dbo.GetScaledModelVer2({},{},{},{},{},{})'.format(
+                yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo
+            )
+        else:
+            sql = 'SELECT * FROM dbo.GetScaledModelTestData({},{},{},{},{},{})'.format(
+                yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo
+            )
         rows = cursor.execute(sql)
         df = pandas.DataFrame((tuple(t) for t in rows)) 
         cursor.close()
         database_con.close()
         return df
+
+    def get_max_load(self):
+        database_con = self.connect()
+        cursor = database_con.cursor()
+
+        sql = 'SELECT dbo.GetMaxLoad()'
+        rows = cursor.execute(sql)
+        for val in rows:
+            ret = val
+
+        cursor.close()
+        database_con.close()
+        return ret[0]
+
+    def get_min_load(self):
+        database_con = self.connect()
+        cursor = database_con.cursor()
+
+        sql = 'SELECT dbo.GetMinLoad()'
+        rows = cursor.execute(sql)
+        for val in rows:
+            ret = val
+
+        cursor.close()
+        database_con.close()
+        return ret[0]

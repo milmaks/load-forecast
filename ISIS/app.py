@@ -19,7 +19,8 @@ model_creator = ModelCreator()
 
 @app.route("/")
 def main():
-    return {"data": "OK"}, 200
+    models = data_preprocessor.get_all_models()
+    return {"data": models}, 200
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -60,10 +61,22 @@ def model_training():
                                                int(dateTo[0]),int(dateTo[1]),int(dateTo[2]))
         return {"data": "OK"}, 200
 
-@app.route('/api/test')
+@app.route('/api/test', methods=['POST'])
 def test():
-    data_preprocessor.calculate_daylight('2022-12-15T12:00:00')
-    return {"data": "OK"}, 200
+    if request.method == 'POST':
+        model_creator.set_path('{}'.format(request.form['model']))
+        pred_days = request.form['days']
+        pred_date = request.form['date'].split('-')
+
+        return model_creator.predict(int(pred_days), int(pred_date[0]), int(pred_date[1]), int(pred_date[2]))
+        return {"data": "OK"}, 200
+
+@app.route('/api/csv', methods=['GET'])
+def csv():
+    if request.method == 'GET':
+        model_creator.get_csv()
+        return {"data": "OK"}, 200
+
 
 if __name__ == "__main__":
     app.run(debug = True)

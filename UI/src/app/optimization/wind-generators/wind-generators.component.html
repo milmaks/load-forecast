@@ -44,15 +44,15 @@
                                     <input type="number" min="0" style="width: 100px;" formControlName="bladeLength">
                                 </td>
                             </tr>
-                            <!-- <tr>
+                            <tr>
                                 <td>
-                                    <label for="efficiency">Efficiency: </label>
+                                    <label for="maxPower">Max power: </label>
                                     
                                 </td>
                                 <td>
-                                    <input type="number" min="0" style="width: 100px;" formControlName="efficiency">
+                                    <input type="number" min="0" style="width: 100px;" formControlName="maxPower">MW
                                 </td>
-                            </tr> -->
+                            </tr>
                             <tr>
                                 <td colspan="2">
                                     <button (click)="addNewGenerator()">ADD NEW WIND POWERPLANT</button>
@@ -76,6 +76,9 @@
                                 Blade length
                             </th>
                             <th>
+                                Max power
+                            </th>
+                            <th>
                                 &nbsp;
                             </th>
                         </tr>
@@ -90,6 +93,9 @@
                             </td>
                             <td>
                                 {{powerPlant.bladeLength}}
+                            </td>
+                            <td>
+                                {{powerPlant.maxPower}}
                             </td>
                             <td>
                                 <button type="button" class="edit-button" (click)="removePowerPlant(i)"><span class="bi bi-trash"></span></button>

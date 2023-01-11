@@ -1,0 +1,33 @@
+input[type="range"] {
+    appearance: slider-vertical;
+    width: 50px;
+}
+
+.wrapper {
+    border: 0;
+}
+.div1 {
+    display: inline-block;
+    width:350px;
+    height:350px;
+    border: 0;
+}
+.div2 {
+    display: inline-block;
+    width:350px;
+    height:350px;
+    border: 0;
+}
+
+.edit-button {
+    border: 0;
+    background: transparent;
+}
+
+.edit-button:hover {
+    color: red;
+}
+
+::ng-deep .mat-expansion-panel-body {
+    text-align: center;
+  }

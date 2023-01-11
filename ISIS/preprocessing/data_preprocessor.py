@@ -155,7 +155,7 @@ class DataPreprocessor:
 
         return vFeelsLike
 
-    def load_updated_files(self):
+    def load_uploaded_files(self):
         path = self.getLocalFolder()
         path.append('uploaded_files')
         path = '\\'.join(path)
@@ -172,75 +172,75 @@ class DataPreprocessor:
             missing_datetime = None
             for file in (files[1])[2]:
                 data = pd.read_csv(os.path.join(path, file))
-                if len(data.columns) == 5: #LOAD
-                    for i in range(len(data.index)):
-                        load_object = data.iloc[i]
-                        if ((load_object['Time Stamp'])[-5:]).strip() == '00:00' and load_object['Name'].strip() == self.town:
-                            if str(load_object['Load']) != 'nan':
-                                loads[datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S').replace(' ', 'T')] =  load_object['Load'] 
-                            else:
-                                missing_datetime = load_object['Time Stamp']
-                                continue
+                # if len(data.columns) == 5: #LOAD
+                #     for i in range(len(data.index)):
+                #         load_object = data.iloc[i]
+                #         if ((load_object['Time Stamp'])[-5:]).strip() == '00:00' and load_object['Name'].strip() == self.town:
+                #             if str(load_object['Load']) != 'nan':
+                #                 loads[datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S').replace(' ', 'T')] =  load_object['Load'] 
+                #             else:
+                #                 missing_datetime = load_object['Time Stamp']
+                #                 continue
                         
-                            if current_day == None:
-                                current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
-                            else:
-                                if current_day == datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d'):
-                                    one_day_load.append(load_object['Load'])
-                                else:
-                                    avg = sum(one_day_load) / len(one_day_load)
-                                    self.database.add_average_load(int(current_day[0:4]), int(current_day[5:7]), int(current_day[8:10]), avg, False)
-                                    one_day_load.clear()
-                                    one_day_load.append(load_object['Load'])
-                                    current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
-                        elif missing_datetime != None: 
-                            print(missing_datetime)
-                            if load_object['Name'].strip() == self.town and str(load_object['Load']) != 'nan':
-                                loads[datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:00:00').replace(' ', 'T')] =  load_object['Load']
-                                missing_datetime = None
-                                if current_day == datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d'):
-                                    one_day_load.append(load_object['Load'])
-                                else:
-                                    avg = sum(one_day_load) / len(one_day_load)
-                                    self.database.add_average_load(int(current_day[0:4]), int(current_day[5:7]), int(current_day[8:10]), avg, False)
-                                    one_day_load.clear()
-                                    one_day_load.append(load_object['Load'])
-                                    current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
-                else:
-                    for i in range(len(data.index)):
-                        weather_object = data.iloc[i]
+                #             if current_day == None:
+                #                 current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
+                #             else:
+                #                 if current_day == datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d'):
+                #                     one_day_load.append(load_object['Load'])
+                #                 else:
+                #                     avg = sum(one_day_load) / len(one_day_load)
+                #                     self.database.add_average_load(int(current_day[0:4]), int(current_day[5:7]), int(current_day[8:10]), avg, False)
+                #                     one_day_load.clear()
+                #                     one_day_load.append(load_object['Load'])
+                #                     current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
+                #         elif missing_datetime != None: 
+                #             print(missing_datetime)
+                #             if load_object['Name'].strip() == self.town and str(load_object['Load']) != 'nan':
+                #                 loads[datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:00:00').replace(' ', 'T')] =  load_object['Load']
+                #                 missing_datetime = None
+                #                 if current_day == datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d'):
+                #                     one_day_load.append(load_object['Load'])
+                #                 else:
+                #                     avg = sum(one_day_load) / len(one_day_load)
+                #                     self.database.add_average_load(int(current_day[0:4]), int(current_day[5:7]), int(current_day[8:10]), avg, False)
+                #                     one_day_load.clear()
+                #                     one_day_load.append(load_object['Load'])
+                #                     current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
+                # else:
+                for i in range(len(data.index)):
+                    weather_object = data.iloc[i]
 
-                        if str(weather_object['humidity']) == 'nan':
-                            continue
+                    if str(weather_object['humidity']) == 'nan':
+                        continue
 
-                        if weather_object['humidity'] < 0 or weather_object['humidity'] > 100:
-                            continue
+                    if weather_object['humidity'] < 0 or weather_object['humidity'] > 100:
+                        continue
 
-                        if str(weather_object['temp']) == 'nan' or weather_object['temp'] < -20 or weather_object['temp'] > 115:
-                            if nonCompleteExists:
-                                print('ERROR: More than 1 temp missing in a row date-{}', data['datetime'])
-                                exit()
-                            nonCompleteExists = True
-                            lastNonCompleteModel = LearningModel(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10]), int(weather_object['datetime'][11:13]), 0, weather_object['feelslike'],
-                            weather_object['humidity'], weather_object['windspeed'], weather_object['cloudcover'], #weather_object['solarradiation'],
-                            date(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10])).weekday(), self.calculate_daylight(weather_object['datetime']), NaN)
-                            continue
-
+                    if str(weather_object['temp']) == 'nan' or weather_object['temp'] < -20 or weather_object['temp'] > 115:
                         if nonCompleteExists:
-                            lastNonCompleteModel.temp = (temps[-1] + weather_object['temp']) / 2
-                            lastNonCompleteModel.feels_like = self.calculate_feelslike_temp(lastNonCompleteModel.temp, lastNonCompleteModel.wind_speed, lastNonCompleteModel.humidity)
-                            weathers.append(lastNonCompleteModel)
-                            nonCompleteExists = False
-                        
-                        temps.append(weather_object['temp'])
-                        weathers.append(LearningModel(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10]), int(weather_object['datetime'][11:13]), weather_object['temp'], weather_object['feelslike'],
-                            weather_object['humidity'], weather_object['windspeed'], weather_object['cloudcover'], #weather_object['solarradiation'],
-                            date(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10])).weekday(), self.calculate_daylight(weather_object['datetime']), NaN))
-                
+                            print('ERROR: More than 1 temp missing in a row date-{}', data['datetime'])
+                            exit()
+                        nonCompleteExists = True
+                        lastNonCompleteModel = LearningModel(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10]), int(weather_object['datetime'][11:13]), 0, weather_object['feelslike'],
+                        weather_object['humidity'], weather_object['windspeed'], weather_object['cloudcover'], #weather_object['solarradiation'],
+                        date(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10])).weekday(), self.calculate_daylight(weather_object['datetime']), NaN)
+                        continue
+
+                    if nonCompleteExists:
+                        lastNonCompleteModel.temp = (temps[-1] + weather_object['temp']) / 2
+                        lastNonCompleteModel.feels_like = self.calculate_feelslike_temp(lastNonCompleteModel.temp, lastNonCompleteModel.wind_speed, lastNonCompleteModel.humidity)
+                        weathers.append(lastNonCompleteModel)
+                        nonCompleteExists = False
+                    
+                    temps.append(weather_object['temp'])
+                    weathers.append(LearningModel(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10]), int(weather_object['datetime'][11:13]), weather_object['temp'], weather_object['feelslike'],
+                        weather_object['humidity'], weather_object['windspeed'], weather_object['cloudcover'], #weather_object['solarradiation'],
+                        date(int(weather_object['datetime'][0:4]), int(weather_object['datetime'][5:7]), int(weather_object['datetime'][8:10])).weekday(), self.calculate_daylight(weather_object['datetime']), NaN))
+            
             break
 
         for model in weathers:
-            model.load = loads.get((str(datetime(int(model.year), int(model.month), int(model.day), int(model.hour), 0, 0))).replace(' ', 'T'))
+            model.load = 0
             self.write_to_db(model, False)
 
     def getLocalFolder(self):
@@ -248,8 +248,8 @@ class DataPreprocessor:
         return path[:-1]
 
     def process_data(self):
-        self.load_from_fs()
-        #self.load_updated_files()
+        #self.load_from_fs()
+        self.load_uploaded_files()
         #print("Already loaded")
         # load_sheet = pd.read_excel(os.path.join(self.files_folder_path, filename), sheet_name='load')
         
@@ -257,5 +257,9 @@ class DataPreprocessor:
         #     print(row['DateShort'])
         #     if(index == 0):
         #         break
+
+    def get_all_models(self):
+        for id, dirs in enumerate(os.walk(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'models'))):
+            return dirs[1]
 
     

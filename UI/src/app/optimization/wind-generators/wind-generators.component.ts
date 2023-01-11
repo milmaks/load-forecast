@@ -13,6 +13,7 @@ export class WindGeneratorsComponent {
 
   powerPlant = new FormGroup({
     name: new FormControl("", Validators.required),
+    maxPower: new FormControl(0, Validators.required),
     numOfTurbines: new FormControl(0, Validators.required),
     bladeLength: new FormControl(0, Validators.required),
   });
@@ -27,6 +28,7 @@ export class WindGeneratorsComponent {
       let gen: WindPowerPlant = {
         id: this.powerPlantsList.length,
         name: this.powerPlant.controls.name.value!,
+        maxPower: this.powerPlant.controls.maxPower.value!,
         numOfTurbines: this.powerPlant.controls.numOfTurbines.value!,
         bladeLength: this.powerPlant.controls.bladeLength.value!,
       }

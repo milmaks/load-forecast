@@ -7,6 +7,6 @@ class Scorer:
         return trainScore, testScore
 
     def get_mape_score(self, trainY, trainPredict, testY, testPredict):
-        trainScore = math.sqrt(mean_absolute_percentage_error(trainY, trainPredict))
+        trainScore = mean_absolute_percentage_error(trainY, trainPredict)
         testScore = mean_absolute_percentage_error(testY, testPredict) * 100 #SQRT?
         return trainScore, testScore

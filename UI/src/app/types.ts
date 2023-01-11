@@ -39,6 +39,7 @@ export interface WindPowerPlant {
     name: string;
     numOfTurbines: number;
     bladeLength: number;
+    maxPower: number;
 }
 
 export interface HydroPowerPlant {
@@ -47,7 +48,21 @@ export interface HydroPowerPlant {
     power: number;
 }
 
+export interface OptimizationParameters {
+    model: string;
+    coalGenerators: CoalPowerPlant[];
+    gasGenerators: GasPowerPlant[];
+    solarGenerators: SolarPowerPlant[];
+    windGenerators: WindPowerPlant[];
+    hydroGenerators: HydroPowerPlant[];
+}
+
 export interface TrainingDates {
     dateFrom: string;
     dateTo: string;
+}
+
+export interface Response {
+    list: Array<string>
+    code: number
 }

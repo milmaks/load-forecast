@@ -1,42 +1,68 @@
-<div class="container">
-    <app-populate></app-populate>
+<div class="wrapper">
 
-    <app-train></app-train>
+    <div class="div1">
+        <app-populate></app-populate>
 
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    <label>Import model:</label>
-                    <input type="file" class="custom-file-input" accept=".csv" value="IMPORT CSV" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Date from:</label>
-                    <input type="date" id="from" value="2018-01-01" placeholder="To" min="2018-01-01"
-                        max="2021-12-31" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Number of days:</label>
-                    <select id="numofdays" class="number">
-                        <option value="7">7</option>
-                        <option value="6">6</option>
-                        <option value="5">5</option>
-                        <option value="4">4</option>
-                        <option value="3">3</option>
-                        <option value="2">2</option>
-                        <option value="1">1</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" class="button-14" value="PREDICT" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <app-train></app-train>
+
+        <form [formGroup]="testForm">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Choose model:&nbsp;</label>
+                            <select formControlName="model">
+                                <option *ngFor="let m of models" [value]="m">
+                                    {{m}}
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date from:&nbsp;</label>
+                            <input type="date" id="from" value="2018-01-01" placeholder="To" min="2018-01-01"
+                                max="2021-12-31" formControlName="date" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of days:&nbsp;</label>
+                            <select id="numofdays" class="number" formControlName="days">
+                                <option value="7">7</option>
+                                <option value="6">6</option>
+                                <option value="5">5</option>
+                                <option value="4">4</option>
+                                <option value="3">3</option>
+                                <option value="2">2</option>
+                                <option value="1">1</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button-14" value="PREDICT" (click)="test()" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <form>
+            <input type="submit" class="button-14" value="GET CSV" (click)="csv()" />
+        </form>
+    </div>
+
+    <div class="div2">
+            <table *ngIf="predicted">
+                <tr>
+                    <th>Time</th>
+                    <th>Load</th>
+                </tr>
+                <tr *ngFor="let d of data; index as i">
+                    <td>{{this.dates[i] | date :'short':'UTC'}}</td>
+                    <td>{{this.data[i]}}</td>                  
+                </tr>
+            </table>
+    </div>
 </div>
