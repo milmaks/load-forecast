@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
 import os
 import time
-
-from flask import Response, jsonify, send_file
+from flask import jsonify
 import numpy
 from ann.custom_plotting import CustomPloting
 from ann.scorer import Scorer
@@ -65,7 +64,7 @@ class ModelCreator:
         testPredict = numpy.reshape(testPredict, (testPredict.shape[0]))
         
         self.predicted_data = testPredict
-        self.plot(testPredict, testY)
+        #self.plot(testPredict, testY)
         rescaled_data, dates = self.scale_back()
         return jsonify({"data": rescaled_data, "dates": dates})
 
@@ -89,7 +88,7 @@ class ModelCreator:
         for val in self.predicted_data:
             dates.append(curr_date)
             curr_date += timedelta(hours=1)
-            rescaled_data.append((max_orig-min_orig) * (val - min_pred) / (max_pred - min_pred) + min_orig)
+            rescaled_data.append(round((max_orig-min_orig) * (val - min_pred) / (max_pred - min_pred) + min_orig, 1))
     
         return rescaled_data, dates
 

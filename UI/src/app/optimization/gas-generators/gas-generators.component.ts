@@ -59,6 +59,7 @@ export class GasGeneratorsComponent {
   @Input() powerPlantsList: GasPowerPlant[] = [];
 
   panelOpenState = false;
+  selectedItem = -1;
 
   updatePositionChart1: any = null;
   smoothCurveChart1 = true;
@@ -471,12 +472,35 @@ export class GasGeneratorsComponent {
         Co2ToPowerCurveQuadratic: this.smoothCurveChart3,
       }
 
-      //console.log(gen);
-
       this.powerPlantsList.push(gen);
 
       this.powerPlant.reset();
       this.resetCharts();
+    }
+  }
+
+  selectedItemValue(val: string) {
+    this.selectedItem = Number(val);
+  }
+
+  changeGeneratorsGraphCurves() {
+    if(this.selectedItem != -1) {
+      this.powerPlantsList.forEach(powerPlant => {
+        powerPlant.priceToPowerCurve = fuelToPower,
+        powerPlant.priceToCo2Curve = priceToTon,
+        powerPlant.Co2ToPowerCurve = tonToPower,
+        powerPlant.priceToPowerCurveQuadratic = this.smoothCurveChart1,
+        powerPlant.priceToCo2CurveQuadratic = this.smoothCurveChart2,
+        powerPlant.Co2ToPowerCurveQuadratic = this.smoothCurveChart3
+      });
+    }
+    else {
+      this.powerPlantsList[this.selectedItem].priceToPowerCurve = fuelToPower;
+      this.powerPlantsList[this.selectedItem].priceToCo2Curve = priceToTon;
+      this.powerPlantsList[this.selectedItem].Co2ToPowerCurve = tonToPower;
+      this.powerPlantsList[this.selectedItem].priceToPowerCurveQuadratic = this.smoothCurveChart1;
+      this.powerPlantsList[this.selectedItem].priceToCo2CurveQuadratic = this.smoothCurveChart2;
+      this.powerPlantsList[this.selectedItem].Co2ToPowerCurveQuadratic = this.smoothCurveChart3;
     }
   }
 

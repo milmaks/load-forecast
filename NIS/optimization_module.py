@@ -1,217 +1,169 @@
 from datetime import date
 import datetime
+import json
 import math
+from numbers import Number
 import zoneinfo
 from astral import LocationInfo
-import pytz
-from scipy.optimize import linprog
+from flask import jsonify
+import numpy as np
+from simplex_module import Simplex
 from database import DataBase
 from astral.sun import elevation
-import cplex
+import requests
+from scipy.interpolate import UnivariateSpline
 
+endpoint = 'http://localhost:5000'
+url = endpoint + '/api/test'
 
 class OptimizationModule:
     def __init__(self):
         self.database = DataBase()
+        self.simplex = Simplex()
         self.model = None
         self.coal_generators = None
         self.gas_generators = None
         self.solar_generators = None
         self.wind_generators = None
         self.hydro_generators = None
+        self.fuel_criteria = None
+        self.co2_criteria = None
+        self.coal_expanditure = None
+        self.gas_expanditure = None
 
     def set_parameters(self, optimization_parametes):
         self.model = optimization_parametes['model']
+
+        if (str(optimization_parametes['criteria']) == '0'):
+            self.fuel_criteria = 1
+            self.co2_criteria = 0
+        if (str(optimization_parametes['criteria']) == '1'):
+            self.fuel_criteria = 0
+            self.co2_criteria = 1
+        if (str(optimization_parametes['criteria']) == '2'):
+            self.fuel_criteria = 1
+            self.co2_criteria = 1    
+
         self.coal_generators = optimization_parametes['coalGenerators']
+        self.simplex.coal_generators = optimization_parametes['coalGenerators']
         self.gas_generators = optimization_parametes['gasGenerators']
+        self.simplex.gas_generators = optimization_parametes['gasGenerators']
         self.solar_generators = optimization_parametes['solarGenerators']
         self.wind_generators = optimization_parametes['windGenerators']
         self.hydro_generators = optimization_parametes['hydroGenerators']
-
+        self.simplex.hydro_generators = optimization_parametes['hydroGenerators']
+    
     def optimize(self):
-        print('optimization')
-        loads = [
-            6817.272023972265,
-            6644.364583744144,
-            6368.130785551232,
-            6126.998999906405,
-            6013.796141753042,
-            6151.390204113815,
-            6378.863084059503,
-            7278.270122329932,
-            7519.013316779688,
-            7715.586600052004,
-            7927.146418934229,
-            8099.232608327269,
-            8268.191842321414,
-            8391.023927722283,
-            8465.69518740398 ,
-            8475.182688356328,
-            8517.15625       ,
-            8389.49513352117 ,
-            8310.053328660662,
-            8240.041898990541,
-            7777.595254525948,
-            7585.12686529185 ,
-            7616.374929113199,
-            7666.262040953411,
-        ]
-
+        print('OPTIMIZATION')
+        data = {'model': self.model, 'days': 1, 'date': '2021-09-07'}
+        response = requests.post(url, data)
+        loads = (json.JSONDecoder().decode(response.text))['data']
+        
         weather_data = self.load_weather_data("2021","9","7")
-    
-        year = weather_data[0][0]
-        month = weather_data[0][1]
-        day = weather_data[0][2]
-        hour = weather_data[0][3]
 
-        #check if it is possible to ajust to percentages
-        solar_production_per_gen = []
-        solar_production = 0
-        for gen in self.solar_generators:
-            prod = self.calculate_solar_generation(weather_data[0][6], gen['tiltAngle'], gen['efficiency'], 5500, weather_data[0][4], year, month, day, hour)
-            solar_production_per_gen.append(prod)
-            solar_production += prod
+        year = 2021
+        month = 9
+        day = 7
 
-        print(solar_production_per_gen)
-        print(solar_production)  
-    
-        wind_production_per_gen = []
-        wind_production = 0
+        results = {}
+        for gen in self.coal_generators:
+            results[gen['name']] = []
+        for gen in self.gas_generators:
+            results[gen['name']] = []
         for gen in self.wind_generators:
-            prod = self.calculate_wind_generation(weather_data[0][5], gen['maxPower'])
-            wind_production_per_gen.append(prod * gen['numOfTurbines'])
-            wind_production += prod
+            results[gen['name']] = []
+        for gen in self.solar_generators:
+            results[gen['name']] = []
+        for gen in self.hydro_generators:
+            results[gen['name']] = []
 
-        print(wind_production_per_gen)
-        print(wind_production) 
+        solar_results = []
+        wind_results = []
+        for i in range(24):
+            hour = i
+    
+            solar_production_per_gen = []
+            solar_production = 0
+            for gen in self.solar_generators:
+                prod = self.calculate_solar_generation(weather_data[i][6], gen['tiltAngle'], gen['efficiency'], gen['area'], weather_data[i][4], year, month, day, hour)
+                solar_production_per_gen.append(prod)
+                solar_production += prod
 
-        target_load = loads[0] - solar_production - wind_production
+            solar_results.append(solar_production_per_gen)
 
-        c = [
-            (self.coal_generators[0]['fuelPrice'] + self.coal_generators[0]['co2']),    #x0
-            (self.coal_generators[1]['fuelPrice'] + self.coal_generators[1]['co2']),    #x1
-            (self.coal_generators[2]['fuelPrice'] + self.coal_generators[2]['co2']),    #x2
-            (self.coal_generators[3]['fuelPrice'] + self.coal_generators[3]['co2']),    #x3
-            (self.gas_generators[0]['fuelPrice'] + self.gas_generators[0]['co2']),      #x4      
-            (self.gas_generators[1]['fuelPrice'] + self.gas_generators[1]['co2']),      #x5
-            (self.gas_generators[2]['fuelPrice'] + self.gas_generators[2]['co2']),      #x6
-            (self.gas_generators[3]['fuelPrice'] + self.gas_generators[3]['co2']),      #x7
-            (0.00001 + 0.00001),                                                        #x8
-        ]
+            wind_production_per_gen = []
+            wind_production = 0
+            for gen in self.wind_generators:
+                prod = self.calculate_wind_generation(weather_data[i][5], gen['maxPower'])
+                wind_production_per_gen.append(prod * gen['numOfTurbines'])
+                wind_production += prod
 
-        A_eq = [[self.coal_generators[0]['power'],
-            self.coal_generators[1]['power'],
-            self.coal_generators[2]['power'],
-            self.coal_generators[3]['power'],
-            self.gas_generators[0]['power'],
-            self.gas_generators[1]['power'],
-            self.gas_generators[2]['power'],
-            self.gas_generators[3]['power'],
-            self.hydro_generators[0]['power']
-        ]]
-        b_eq = [target_load]
+            wind_results.append(wind_production_per_gen)
 
-        x0_bounds = (0.75, 1)
-        x1_bounds = (0.75, 1)
-        x2_bounds = (0.75, 1)
-        x3_bounds = (0.75, 1)
-        x4_bounds = (0.75, 1)
-        x5_bounds = (0.75, 1)
-        x6_bounds = (0.75, 1)
-        x7_bounds = (0.75, 1)
-        x8_bounds = (0.75, 1)
+            target_load = loads[i] - solar_production - wind_production
 
-        integrality = [2, 2, 2, 2, 2, 2, 2, 2, 2]
-        bounds = [x0_bounds, x1_bounds, x2_bounds, x3_bounds, x4_bounds, x5_bounds, x6_bounds, x7_bounds, x8_bounds]
+            res = self.simplex.solve(target_load, self.fuel_criteria, self.co2_criteria)
 
-        res = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs', integrality=integrality)
-        print(res)
+            results[self.coal_generators[0]['name']].append(round(res[0] * self.coal_generators[0]['power'], 2))
+            results[self.coal_generators[1]['name']].append(round(res[1] * self.coal_generators[1]['power'], 2))
+            results[self.coal_generators[2]['name']].append(round(res[2] * self.coal_generators[2]['power'], 2))
+            results[self.coal_generators[3]['name']].append(round(res[3] * self.coal_generators[3]['power'], 2))
+            results[self.gas_generators[0]['name']].append(round(res[4] * self.gas_generators[0]['power']))
+            results[self.gas_generators[1]['name']].append(round(res[5] * self.gas_generators[1]['power']))
+            results[self.gas_generators[2]['name']].append(round(res[6] * self.gas_generators[2]['power']))
+            results[self.gas_generators[3]['name']].append(round(res[7] * self.gas_generators[3]['power']))
+            results[self.hydro_generators[0]['name']].append(round(res[8] * self.hydro_generators[0]['power'], 2))
+            results[self.solar_generators[0]['name']].append(round(solar_production_per_gen[0], 2))
+            results[self.wind_generators[0]['name']].append(round(wind_production_per_gen[0], 2))
 
-        return
-        problem = cplex.Cplex()
+        fuel_res = {}
+        for index, gen in enumerate(results):
+            if 'C' not in str(gen) and 'G' not in str(gen):
+                continue
+            fuel_res[gen+'_fuel'] = []
+            for prod in results[gen]:
+                if 'C' in gen:          #coal
+                    fuel_res[gen+'_fuel'].append(self.calculate_coal_expanditure(prod) * self.coal_generators[index]['power'] * self.coal_generators[index]['fuelPrice']/1000)
+                if 'G' in gen:          #gas
+                    fuel_res[gen+'_fuel'].append(self.calculate_gas_expanditure(prod) * self.gas_generators[index%4]['power'] * self.gas_generators[index%4]['fuelPrice']/1000)
+
+        co2_res = {}
+        for index, gen in enumerate(results):
+            if 'C' not in str(gen) and 'G' not in str(gen):
+                continue
+            co2_res[gen+'_co2'] = []
+            for prod in results[gen]:
+                if 'C' in gen:          #coal
+                    co2_res[gen+'_co2'].append(prod * self.coal_generators[index]['power'] * self.coal_generators[index]['co2'] / 1000)
+                if 'G' in gen:          #gas
+                    co2_res[gen+'_co2'].append(prod * self.gas_generators[index%4]['power'] * self.gas_generators[index%4]['co2'] / 1000)            
+
+        for res in fuel_res:
+            results[res] = fuel_res[res]
+        for res in co2_res:
+            results[res] = co2_res[res]
+
+        return results
+
+    def calculate_coal_expanditure(self, prod):
+        if self.coal_expanditure is None:
+            x = np.array([0, 1])
+            y = np.array([0, 378])
+
+            self.coal_expanditure = UnivariateSpline(x,y,k=1,s=0)
         
-        # SELECT SIMPLEX NOT LINEAR PROGRAMING (https://www.ibm.com/mysupport/s/question/0D55000005khHueCAE/how-to-configure-cplex-opl-to-use-simplex-method?language=en_US)(https://www.ibm.com/docs/en/icos/12.8.0.0?topic=parameters-algorithm-continuous-linear-problems)
-        problem.parameters.lpmethod = 1
+        return self.coal_expanditure(prod)
+    
+    def calculate_gas_expanditure(self, prod):
+        if self.gas_expanditure is None:
+            conv_rate_to_m3 = 35.31466672
+            x =  np.array([0, 0.25, 0.5, 0.75, 1])
+            y = np.array([0, 4482/conv_rate_to_m3, 7332/conv_rate_to_m3, 10147/conv_rate_to_m3, 12780/conv_rate_to_m3])
 
-        # We want to find a minimum of our objective function
-        problem.objective.set_sense(problem.objective.sense.minimize)
-
-        # The names of our variables
-        names = ["c1", "c2", "c3", "c4", "g1", "g2", "g3", "g4", "h1"]
-
-        # The obective function. More precisely, the coefficients of the objective
-        # function. Note that we are casting to floats.
-        objective = [
-            (self.coal_generators[0]['fuelPrice'] + self.coal_generators[0]['co2']),    #x0
-            (self.coal_generators[1]['fuelPrice'] + self.coal_generators[1]['co2']),    #x1
-            (self.coal_generators[2]['fuelPrice'] + self.coal_generators[2]['co2']),    #x2
-            (self.coal_generators[3]['fuelPrice'] + self.coal_generators[3]['co2']),    #x3
-            (self.gas_generators[0]['fuelPrice'] + self.gas_generators[0]['co2']),      #x4      
-            (self.gas_generators[1]['fuelPrice'] + self.gas_generators[1]['co2']),      #x5
-            (self.gas_generators[2]['fuelPrice'] + self.gas_generators[2]['co2']),      #x6
-            (self.gas_generators[3]['fuelPrice'] + self.gas_generators[3]['co2']),      #x7
-            (0.00001 + 0.00001),                                                        #x8
-        ]
-
-        # Lower bounds, all zeroes is the default.
-        lower_bounds = [0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75]
-        upper_bounds = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-        types = [problem.variables.type.semi_continuous] * len(names)
-
-        problem.variables.add(obj = objective,
-                      lb = lower_bounds,
-                      ub = upper_bounds,
-                      names = names,
-                      types = types)
+            self.gas_expanditure = UnivariateSpline(x,y,k=1,s=0)
         
-        constraint_names = ["const1"]
+        return self.gas_expanditure(prod) / 1000
 
-        # The first constraint is entered by referring to each variable by its name
-        # (which we defined earlier)
-        first_constaint = [
-            ["c1", "c2", "c3", "c4", "g1", "g2", "g3", "g4", "h1"],
-            [self.coal_generators[0]['power'],
-            self.coal_generators[1]['power'],
-            self.coal_generators[2]['power'],
-            self.coal_generators[3]['power'],
-            self.gas_generators[0]['power'],
-            self.gas_generators[1]['power'],
-            self.gas_generators[2]['power'],
-            self.gas_generators[3]['power'],
-            self.hydro_generators[0]['power']
-        ]]
-        
-        constraints = [first_constaint]
-
-        # So far we haven't added a right hand side, so we do that now. Note that the
-        # first entry in this list corresponds to the first constraint, and so-on.
-        rhs = [target_load]
-        # We need to enter the senses of the constraints. That is, we need to tell Cplex
-        # whether each constrains should be treated as an upper-limit (≤, denoted "L"
-        # for less-than), a lower limit (≥, denoted "G" for greater than) or an equality
-        # (=, denoted "E" for equality)
-        constraint_senses = ["E"]
-
-        # And add the constraints
-        problem.linear_constraints.add(lin_expr = constraints,
-                                    senses = constraint_senses,
-                                    rhs = rhs,
-                                    names = constraint_names)
-
-        # Solve the problem
-        problem.solve()
-
-        # And print the solutions
-        print(problem.solution.get_values())
-
-
-        return
-
-    def callback(self, result):
-        print('-------------CALLBACK-------------')
-        print(result)
-        print('----------------------------------')
 
     def load_weather_data(self, year, month, day):
         return self.database.get_weather_data(year, month, day)
@@ -248,7 +200,8 @@ class OptimizationModule:
         print(dateandtime)
         sun_angle = elevation(city.observer, dateandtime=dateandtime, with_refraction=False)
 
-        s_mod = (solar_radiation * math.sin(sun_angle + panel_angle) / math.sin(sun_angle))
+        #s_mod = (solar_radiation * math.sin(sun_angle + panel_angle) / math.sin(sun_angle))
+        s_mod = solar_radiation
         temp = (temp - 32) * 5/9
         return ((eff / 100) * s_mod * area * (1 - 0.005 * (temp - 25))) / 1000
         

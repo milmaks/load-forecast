@@ -14,6 +14,7 @@ export class HydroGeneratorsComponent {
   powerPlant = new FormGroup({
     name: new FormControl("", Validators.required),
     power: new FormControl(0, Validators.required),
+    cost: new FormControl(0, Validators.required)
   });
 
   removePowerPlant(id: number) {
@@ -27,6 +28,7 @@ export class HydroGeneratorsComponent {
         id: this.powerPlantsList.length,
         name: this.powerPlant.controls.name.value!,
         power: this.powerPlant.controls.power.value!,
+        cost: this.powerPlant.controls.cost.value!
       }
       this.powerPlantsList.push(gen);
 

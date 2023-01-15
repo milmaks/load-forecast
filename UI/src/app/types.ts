@@ -46,10 +46,12 @@ export interface HydroPowerPlant {
     id: number;
     name: string;
     power: number;
+    cost: number;
 }
 
 export interface OptimizationParameters {
     model: string;
+    criteria: string;
     coalGenerators: CoalPowerPlant[];
     gasGenerators: GasPowerPlant[];
     solarGenerators: SolarPowerPlant[];

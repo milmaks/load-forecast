@@ -20,7 +20,10 @@ import { SolarGeneratorsComponent } from './optimization/solar-generators/solar-
 import { TrainComponent } from './forecast/train/train.component';
 import { WindGeneratorsComponent } from './optimization/wind-generators/wind-generators.component';
 import { HydroGeneratorsComponent } from './optimization/hydro-generators/hydro-generators.component';
+import { DatePipe } from '@angular/common';
 
+import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
+var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { HydroGeneratorsComponent } from './optimization/hydro-generators/hydro-
     SolarGeneratorsComponent,
     TrainComponent,
     WindGeneratorsComponent,
-    HydroGeneratorsComponent
+    HydroGeneratorsComponent,
+    CanvasJSChart
   ],
   imports: [
     BrowserModule,
@@ -48,9 +52,9 @@ import { HydroGeneratorsComponent } from './optimization/hydro-generators/hydro-
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

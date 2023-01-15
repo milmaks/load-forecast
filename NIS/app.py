@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from optimization_module import OptimizationModule
@@ -19,8 +19,8 @@ def optimize():
     if request.method == 'POST':
         optimization_parametes = request.get_json()
         optimization_module.set_parameters(optimization_parametes)
-        optimization_module.optimize()
-        return {"data": "OK"}, 200
+        data = optimization_module.optimize()
+        return jsonify({"data": data})
 
 @app.route('/api/weather')
 def load():

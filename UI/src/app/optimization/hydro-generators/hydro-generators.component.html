@@ -32,7 +32,16 @@
                                     
                                 </td>
                                 <td>
-                                    <input id="power" type="number" min="0" style="width: 100px;" formControlName="power">
+                                    <input id="power" type="number" min="0" style="width: 100px;" formControlName="power">MW
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="cost">Cost: </label>
+                                    
+                                </td>
+                                <td>
+                                    <input id="cost" type="number" min="0" style="width: 100px;" formControlName="cost">
                                 </td>
                             </tr>
                             <tr>
@@ -55,6 +64,9 @@
                                 Power
                             </th>
                             <th>
+                                Cost
+                            </th>
+                            <th>
                                 &nbsp;
                             </th>
                         </tr>
@@ -66,6 +78,9 @@
                             </td>
                             <td>
                                 {{powerPlant.power}}
+                            </td>
+                            <td>
+                                {{powerPlant.cost}}
                             </td>
                             <td>
                                 <button type="button" class="edit-button" (click)="removePowerPlant(i)"><span class="bi bi-trash"></span></button>

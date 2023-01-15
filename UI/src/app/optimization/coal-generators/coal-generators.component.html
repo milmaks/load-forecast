@@ -78,6 +78,24 @@
         </div>
         <div class="wrapper">
             <div class="div1">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Change curve:
+                                <select #selectedItem (change)="selectedItemValue(selectedItem.value)">
+                                    <option value="-1">All</option>
+                                    <option *ngFor="let powerPlant of powerPlantsList; let i = index" [value]="i">
+                                        {{powerPlant.name}}
+                                    </option>
+                                </select>
+                                &nbsp;<button (click)="changeGeneratorsGraphCurves()">CHANGE</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="div1">
                 <form [formGroup]="powerPlant">
                     <table>
                         <tbody>
@@ -96,7 +114,7 @@
                             <tr>
                                 <td>
                                     <label for="co2">CO2 otuput:&nbsp;</label>
-                                    <input id="co2" type="number" min="0" formControlName="co2"/>t
+                                    <input id="co2" type="number" min="0" formControlName="co2"/>g/kW
                                 </td>
                             </tr>
                             <tr>

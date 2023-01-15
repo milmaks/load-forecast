@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -10,12 +11,58 @@ import { ForecastService } from './forecast.service';
 })
 export class ForecastComponent implements OnInit {
 
-  constructor(private service: ForecastService, private toastr: ToastrService) { }
+  constructor(private service: ForecastService, private toastr: ToastrService, public datepipe: DatePipe) { }
 
   models:any;
   predicted = false;
   data = [];
   dates = [];
+  chartOptions = {
+    title: {
+    text: "Load"             
+    },
+    animationEnabled: true,
+    axisX: {      
+      //valueFormatString: ""
+    },
+    toolTip: {
+    shared: true,
+    contentFormatter: function (e: any) {
+      var content = '';
+      for (var i = e.entries.length - 1; i >= 0; i--) {
+      content += "<span style ='color:" + e.entries[i].dataSeries.color + "; font-weight: bold;';>" + e.entries[i].dataSeries.name + "</span>:" + e.entries[i].dataPoint.y + "MW";
+      content += "<br/>";
+      }
+      return content;
+    }
+    },
+    legend: {
+    cursor: "pointer",
+    itemclick: function(e: any) {
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+      e.dataSeries.visible = false;
+      }
+      else {
+      e.dataSeries.visible = true;
+      }
+      e.chart.render();
+    }
+    },
+    data: [
+      {
+        type: "stackedArea",
+        name: "Prediction",
+        showInLegend: true,
+        legendMarkerType: "square",
+        markerSize: 0,
+        color: "rgba(0,0,255,.9)",
+        dataPoints: [
+          {x: new Date(), y: 1}
+          ]
+      }            
+    ]
+  }
+  showGraph = false;
 
   ngOnInit(): void {
     this.service.getModels().subscribe({
@@ -27,6 +74,65 @@ export class ForecastComponent implements OnInit {
         this.toastr.error('Error! Backend not started!');
       }
     });
+
+    this.chartOptions = {
+      title: {
+      text: "Load"             
+      },
+      animationEnabled: true,
+      axisX: {      
+        valueFormatString: "DD-DDD-HH"
+      },
+      toolTip: {
+      shared: true,
+      contentFormatter: function (e: any) {
+        var content = '';
+        for (var i = e.entries.length - 1; i >= 0; i--) {
+          content += e.entries[i].dataPoint.x.toLocaleString();
+          content += "<br/>";
+          content += "<span style ='color:" + e.entries[i].dataSeries.color + "; font-weight: bold;';>" + e.entries[i].dataSeries.name + "</span>:" + e.entries[i].dataPoint.y + "MW";
+          content += "<br/>";
+        }
+        return content;
+      }
+      },
+      legend: {
+      cursor: "pointer",
+      itemclick: function(e: any) {
+        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+        }
+        else {
+        e.dataSeries.visible = true;
+        }
+        e.chart.render();
+      }
+      },
+      data: [
+        {
+          type: "stackedArea",
+          name: "Prediction",
+          showInLegend: true,
+          legendMarkerType: "square",
+          markerSize: 0,
+          color: "rgba(0,0,255,.9)",
+          dataPoints: [
+            {x: new Date(), y: 1}
+            ]
+        }            
+      ]
+    }
+
+    this.chartOptions['data'][0]['dataPoints'] = []
+    let time;
+    if(this.showGraph) {
+      this.data.forEach((element: number, index: number) => {
+        time = new Date(this.dates[index]);
+        time.setHours(time.getHours() - 2);
+        (this.chartOptions['data'][0]['dataPoints']).push({x: new Date(time), y: element})
+      });
+    }
+
   }
 
   dateMin = new Date(2018,1,1);
@@ -61,10 +167,12 @@ export class ForecastComponent implements OnInit {
     this.service.test(formData).subscribe({
       next: (data) => {
         this.toastr.success('Test finished!');
-        console.log(data);
         this.data = data.data;
         this.dates = data.dates;
         this.predicted = true;
+
+        this.showGraph = true;
+        this.ngOnInit();
       },
       error: (error) => {
         this.toastr.error('Error!');

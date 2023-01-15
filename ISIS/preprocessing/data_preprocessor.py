@@ -1,12 +1,10 @@
-from cmath import sqrt
 import os
 import zoneinfo
 from numpy import NaN
 import pytz
-import xlrd
 import pandas as pd
 from datetime import datetime, date
-from astral.sun import sun, elevation
+from astral.sun import sun
 from astral import LocationInfo
 import math
 from data.learning_model import LearningModel
@@ -167,46 +165,10 @@ class DataPreprocessor:
             temps = []
             lastNonCompleteModel: LearningModel
             nonCompleteExists = False
-            one_day_load = []
-            current_day = None
-            missing_datetime = None
+            
             for file in (files[1])[2]:
                 data = pd.read_csv(os.path.join(path, file))
-                # if len(data.columns) == 5: #LOAD
-                #     for i in range(len(data.index)):
-                #         load_object = data.iloc[i]
-                #         if ((load_object['Time Stamp'])[-5:]).strip() == '00:00' and load_object['Name'].strip() == self.town:
-                #             if str(load_object['Load']) != 'nan':
-                #                 loads[datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S').replace(' ', 'T')] =  load_object['Load'] 
-                #             else:
-                #                 missing_datetime = load_object['Time Stamp']
-                #                 continue
-                        
-                #             if current_day == None:
-                #                 current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
-                #             else:
-                #                 if current_day == datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d'):
-                #                     one_day_load.append(load_object['Load'])
-                #                 else:
-                #                     avg = sum(one_day_load) / len(one_day_load)
-                #                     self.database.add_average_load(int(current_day[0:4]), int(current_day[5:7]), int(current_day[8:10]), avg, False)
-                #                     one_day_load.clear()
-                #                     one_day_load.append(load_object['Load'])
-                #                     current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
-                #         elif missing_datetime != None: 
-                #             print(missing_datetime)
-                #             if load_object['Name'].strip() == self.town and str(load_object['Load']) != 'nan':
-                #                 loads[datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:00:00').replace(' ', 'T')] =  load_object['Load']
-                #                 missing_datetime = None
-                #                 if current_day == datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d'):
-                #                     one_day_load.append(load_object['Load'])
-                #                 else:
-                #                     avg = sum(one_day_load) / len(one_day_load)
-                #                     self.database.add_average_load(int(current_day[0:4]), int(current_day[5:7]), int(current_day[8:10]), avg, False)
-                #                     one_day_load.clear()
-                #                     one_day_load.append(load_object['Load'])
-                #                     current_day = datetime.strptime(load_object['Time Stamp'], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
-                # else:
+                
                 for i in range(len(data.index)):
                     weather_object = data.iloc[i]
 
@@ -250,13 +212,6 @@ class DataPreprocessor:
     def process_data(self):
         #self.load_from_fs()
         self.load_uploaded_files()
-        #print("Already loaded")
-        # load_sheet = pd.read_excel(os.path.join(self.files_folder_path, filename), sheet_name='load')
-        
-        # for index, row in load_sheet.iterrows():
-        #     print(row['DateShort'])
-        #     if(index == 0):
-        #         break
 
     def get_all_models(self):
         for id, dirs in enumerate(os.walk(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'models'))):

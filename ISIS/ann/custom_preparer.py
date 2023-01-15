@@ -66,28 +66,6 @@ class CustomPreparer:
         testY = testXAndY[:,self.predictor_column_no]
         return trainPredict, trainY, testPredict, testY
 
-    def inverse_transform2(self, testPredict):
-        #trainPredict = numpy.reshape(trainPredict, (trainPredict.shape[0], trainPredict.shape[1]))
-        testPredict = numpy.reshape(testPredict, (testPredict.shape[0], testPredict.shape[1]))
-        #self.trainX = numpy.reshape(self.trainX, (self.trainX.shape[0], self.trainX.shape[2]))
-        self.testX = numpy.reshape(self.testX, (self.testX.shape[0], self.testX.shape[2]))
-        #trainXAndPredict = numpy.concatenate((self.trainX, trainPredict),axis=1)
-        testXAndPredict = numpy.concatenate((self.testX, testPredict),axis=1)
-        #trainY = numpy.reshape(self.trainY, (self.trainY.shape[0], 1))
-        testY = numpy.reshape(self.testY, (self.testY.shape[0], 1))
-        #trainXAndY = numpy.concatenate((self.trainX, trainY),axis=1)
-        testXAndY = numpy.concatenate((self.testX, testY),axis=1)
-        #trainXAndPredict = self.scaler.inverse_transform(trainXAndPredict)
-        #trainXAndY = self.scaler.inverse_transform(trainXAndY)
-        testXAndPredict = self.scaler.inverse_transform(testXAndPredict)
-        testXAndY = self.scaler.inverse_transform(testXAndY)
-        #trainPredict = trainXAndPredict[:,self.predictor_column_no]
-        #trainY = trainXAndY[:,self.predictor_column_no]
-        testPredict = testXAndPredict[:,self.predictor_column_no]
-        testY = testXAndY[:,self.predictor_column_no]
-        return testPredict, testY
-
-
     def create_dataset(self, dataset, look_back):
         dataX, dataY = [], []
         for i in range(len(dataset)-1):

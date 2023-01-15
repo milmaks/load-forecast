@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request
+from flask import Flask, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from ann.model_creator import ModelCreator
@@ -69,7 +69,6 @@ def test():
         pred_date = request.form['date'].split('-')
 
         return model_creator.predict(int(pred_days), int(pred_date[0]), int(pred_date[1]), int(pred_date[2]))
-        return {"data": "OK"}, 200
 
 @app.route('/api/csv', methods=['GET'])
 def csv():

@@ -1,5 +1,4 @@
-from datetime import datetime
-from keras.layers import Dense, Dropout
+from keras.layers import Dense
 from keras.models import Sequential
 import numpy as np
 from tensorflow import keras
@@ -29,9 +28,8 @@ class AnnRegression(AnnBase):
         self.trainX = trainX
         self.model.fit(trainX, trainY, epochs=self.epoch_number, batch_size=self.batch_size_number, verbose=self.verbose)
         self.model.save(MODEL_NAME)
-                                    #,trainX
+
     def use_current_model(self, path):
-        #self.trainX = trainX
         self.model = self.get_model_from_path(path)
 
     def get_predict(self, testX):
@@ -64,7 +62,6 @@ class AnnRegression(AnnBase):
 
     def compile_fit_predict(self, trainX, trainY, testX):
         self.compile_and_fit(trainX, trainY)
-        #self.use_current_model(MODEL_NAME, trainX)
         return self.get_predict(testX)
 
     def predict(self, path, testX):     

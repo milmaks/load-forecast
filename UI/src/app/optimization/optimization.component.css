@@ -1,15 +1,17 @@
 .wrapper {
     border: 0;
 }
+
 .div1 {
     display: inline-block;
-    width:350px;
-    height:350px;
+    width: 350px;
+    height: 350px;
 }
+
 .div2 {
     display: inline-block;
-    width:350px;
-    height:350px;
+    width: 350px;
+    height: 350px;
 }
 
 .edit-button {
@@ -30,3 +32,26 @@
 /* ::ng-deep .mat-expansion-panel-body {
     text-align: center;
   } */
+
+  .blue{
+    border:2px solid #1ABC9C;
+  }
+  
+  .blue thead{
+    background:#1ABC9C;
+  }
+
+  .blue th,td{
+    text-align:center;
+    padding:5px 0;
+  }
+  
+  .blue tbody tr:nth-child(even){
+    background:#ECF0F1;
+  }
+  
+  .blue tbody tr:hover{
+  background:#BDC3C7;
+    color:#FFFFFF;
+  }
+  

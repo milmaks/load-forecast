@@ -1,6 +1,6 @@
 <div class="wrapper">
 
-    <div class="div1">
+    <div class="div1" style="width: 30%;">
         <app-populate></app-populate>
 
         <app-train></app-train>
@@ -53,8 +53,8 @@
         </form>
     </div>
 
-    <div class="div2">
-            <table *ngIf="predicted">
+    <div class="div2" style="width: 70%;">
+        <!-- <table *ngIf="predicted">
                 <tr>
                     <th>Time</th>
                     <th>Load</th>
@@ -63,6 +63,9 @@
                     <td>{{this.dates[i] | date :'short':'UTC'}}</td>
                     <td>{{this.data[i]}}</td>                  
                 </tr>
-            </table>
+            </table> -->
+
+        <canvasjs-chart *ngIf="showGraph" [options]="chartOptions" [styles]="{width: '100%', height:'500px'}">
+        </canvasjs-chart>
     </div>
 </div>
