@@ -49,7 +49,15 @@
         </form>
 
         <form>
-            <input type="submit" class="button-14" value="GET CSV" (click)="csv()" />
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button-14" value="GET CSV" (click)="csv()" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </form>
     </div>
 
@@ -64,7 +72,6 @@
                     <td>{{this.data[i]}}</td>                  
                 </tr>
             </table> -->
-
         <canvasjs-chart *ngIf="showGraph" [options]="chartOptions" [styles]="{width: '100%', height:'500px'}">
         </canvasjs-chart>
     </div>

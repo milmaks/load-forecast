@@ -23,6 +23,7 @@ import { HydroGeneratorsComponent } from './optimization/hydro-generators/hydro-
 import { DatePipe } from '@angular/common';
 
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
+import { RoundNumberPipe } from './round-number.pipe';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 @NgModule({
@@ -38,7 +39,8 @@ var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
     TrainComponent,
     WindGeneratorsComponent,
     HydroGeneratorsComponent,
-    CanvasJSChart
+    CanvasJSChart,
+    RoundNumberPipe
   ],
   imports: [
     BrowserModule,

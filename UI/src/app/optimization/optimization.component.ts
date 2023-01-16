@@ -391,7 +391,7 @@ export class OptimizationComponent implements OnInit {
         name: "C1",
         showInLegend: true,
         legendMarkerType: "square",
-        color: "rgba(211,19,14,.9)",
+        color: "rgba(51, 51, 51,.9)",
         markerSize: 0,
         dataPoints: [
         {x: 0, y: 1},
@@ -426,7 +426,7 @@ export class OptimizationComponent implements OnInit {
         showInLegend: true,
         legendMarkerType: "square",
         markerSize: 0,
-        color: "rgba(95,53,87,.9)",
+        color: "rgba(77, 77, 77,.9)",
         dataPoints: [
           {x: 0, y: 1},
           {x: 1, y: 1},
@@ -460,7 +460,7 @@ export class OptimizationComponent implements OnInit {
         showInLegend: true,
         legendMarkerType: "square",
         markerSize: 0,
-        color: "rgba(60,84,151,.9)",
+        color: "rgba(102, 102, 102,.9)",
         dataPoints: [
           {x: 0, y: 1},
           {x: 1, y: 1},
@@ -494,7 +494,7 @@ export class OptimizationComponent implements OnInit {
         showInLegend: true,
         type: "stackedArea",
         markerSize: 0,
-        color: "rgba(22,115,211,.9)",
+        color: "rgba(128, 128, 128,.9)",
         dataPoints: [
           {x: 0, y: 1},
           {x: 1, y: 1},
@@ -790,6 +790,8 @@ export class OptimizationComponent implements OnInit {
         windGenerators: this.windPowerPlants,
         hydroGenerators: this.hydroPowerPlants
       }
+
+      console.log(optimizationParametes);
       
       this.service.optimize(optimizationParametes).subscribe({
         next: (data) => {
@@ -840,8 +842,6 @@ export class OptimizationComponent implements OnInit {
           this.toastr.error('Error!');
         }
       })
-      
-      this.toastr.success('Pass');
     }
     else {
       this.toastr.error("Fill all required fields!");

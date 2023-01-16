@@ -13,7 +13,7 @@
             <div class="div1">
                 <img src="assets/hydro.png" class="img"/>
             </div>
-            <div class="div2">
+            <!-- <div class="div2">
                 <form [formGroup]="powerPlant">
                     <table>
                         <tbody>
@@ -46,13 +46,13 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <button (click)="addNewGenerator()">ADD NEW HYDRO POWERPLANT</button>
+                                    <button class="button-14" (click)="addNewGenerator()">ADD NEW HYDRO POWERPLANT</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </form>
-            </div>
+            </div> -->
             <div class="div2">
                 <table>
                     <thead>
@@ -77,10 +77,10 @@
                                 {{powerPlant.name}}
                             </td>
                             <td>
-                                {{powerPlant.power}}
+                                <input type="number" [(ngModel)]="powerPlant.power" min="0" style="width: 55px;">
                             </td>
                             <td>
-                                {{powerPlant.cost}}
+                                <input type="number" [(ngModel)]="powerPlant.cost" min="0" style="width: 55px;">
                             </td>
                             <td>
                                 <button type="button" class="edit-button" (click)="removePowerPlant(i)"><span class="bi bi-trash"></span></button>

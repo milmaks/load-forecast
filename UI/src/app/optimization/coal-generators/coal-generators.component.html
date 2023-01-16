@@ -89,13 +89,13 @@
                                         {{powerPlant.name}}
                                     </option>
                                 </select>
-                                &nbsp;<button (click)="changeGeneratorsGraphCurves()">CHANGE</button>
+                                &nbsp;<button class="button-14" (click)="changeGeneratorsGraphCurves()">CHANGE</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="div1">
+            <!-- <div class="div1">
                 <form [formGroup]="powerPlant">
                     <table>
                         <tbody>
@@ -124,12 +124,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <button (click)="addNewGenerator()">ADD NEW COAL POWERPLANT</button>
+                                <button class="button-14" (click)="addNewGenerator()">ADD NEW COAL POWERPLANT</button>
                             </tr>
                         </tbody>
                     </table>
                 </form>
-            </div>
+            </div> -->
             <div class="div2">
                 <table>
                     <thead>
@@ -157,16 +157,16 @@
                                 {{powerPlant.name}}
                             </td>
                             <td>
-                                {{powerPlant.power}}
+                                <input type="number" [(ngModel)]="powerPlant.power" min="0" style="width: 55px;">
                             </td>
                             <td>
-                                {{powerPlant.co2}}
+                                <input type="number" [(ngModel)]="powerPlant.co2" min="0" style="width: 55px;">
                             </td>
                             <td>
-                                {{powerPlant.fuelPrice}}
+                                <input type="number" [(ngModel)]="powerPlant.fuelPrice" min="0" style="width: 55px;">
                             </td>
                             <td>
-                                <button type="button" class="edit-button" (click)="removePowerPlant(i)"><span class="bi bi-trash"></span></button>
+                                <!-- <button type="button" class="edit-button" (click)="removePowerPlant(i)"><span class="bi bi-trash"></span></button> -->
                             </td>
                         </tr>
                     </tbody>

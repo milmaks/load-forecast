@@ -40,7 +40,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button (click)="optimize()">OPTIMIZE</button>  
+                            <button class="button-14" (click)="optimize()">OPTIMIZE</button>  
                         </td>
                     </tr>
                 </tbody>
@@ -57,37 +57,37 @@
     <table class="blue">
         <thead>
             <tr>
-                <th>Gen</th>
-                <th>00:00</th>
-                <th>01:00</th>
-                <th>02:00</th>
-                <th>03:00</th>
-                <th>04:00</th>
-                <th>05:00</th>
-                <th>06:00</th>
-                <th>07:00</th>
-                <th>08:00</th>
-                <th>09:00</th>
-                <th>10:00</th>
-                <th>11:00</th>
-                <th>12:00</th>
-                <th>13:00</th>
-                <th>14:00</th>
-                <th>15:00</th>
-                <th>16:00</th>
-                <th>17:00</th>
-                <th>18:00</th>
-                <th>19:00</th>
-                <th>20:00</th>
-                <th>21:00</th>
-                <th>22:00</th>
-                <th>23:00</th>
+                <th width="74px">Gen</th>
+                <th width="74px">00:00</th>
+                <th width="74px">01:00</th>
+                <th width="74px">02:00</th>
+                <th width="74px">03:00</th>
+                <th width="74px">04:00</th>
+                <th width="74px">05:00</th>
+                <th width="74px">06:00</th>
+                <th width="74px">07:00</th>
+                <th width="74px">08:00</th>
+                <th width="74px">09:00</th>
+                <th width="74px">10:00</th>
+                <th width="74px">11:00</th>
+                <th width="74px">12:00</th>
+                <th width="74px">13:00</th>
+                <th width="74px">14:00</th>
+                <th width="74px">15:00</th>
+                <th width="74px">16:00</th>
+                <th width="74px">17:00</th>
+                <th width="74px">18:00</th>
+                <th width="74px">19:00</th>
+                <th width="74px">20:00</th>
+                <th width="74px">21:00</th>
+                <th width="74px">22:00</th>
+                <th width="74px">23:00</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let arr of fuelExpanditure">
                 <td *ngFor="let element of arr">
-                    {{element}}
+                    {{element | roundNumber : 1}}
                 </td>
             </tr>
         </tbody>
@@ -99,37 +99,37 @@
     <table class="blue">
         <thead>
             <tr>
-                <th>Gen</th>
-                <th>00:00</th>
-                <th>01:00</th>
-                <th>02:00</th>
-                <th>03:00</th>
-                <th>04:00</th>
-                <th>05:00</th>
-                <th>06:00</th>
-                <th>07:00</th>
-                <th>08:00</th>
-                <th>09:00</th>
-                <th>10:00</th>
-                <th>11:00</th>
-                <th>12:00</th>
-                <th>13:00</th>
-                <th>14:00</th>
-                <th>15:00</th>
-                <th>16:00</th>
-                <th>17:00</th>
-                <th>18:00</th>
-                <th>19:00</th>
-                <th>20:00</th>
-                <th>21:00</th>
-                <th>22:00</th>
-                <th>23:00</th>
+                <th width="74px">Gen</th>
+                <th width="74px">00:00</th>
+                <th width="74px">01:00</th>
+                <th width="74px">02:00</th>
+                <th width="74px">03:00</th>
+                <th width="74px">04:00</th>
+                <th width="74px">05:00</th>
+                <th width="74px">06:00</th>
+                <th width="74px">07:00</th>
+                <th width="74px">08:00</th>
+                <th width="74px">09:00</th>
+                <th width="74px">10:00</th>
+                <th width="74px">11:00</th>
+                <th width="74px">12:00</th>
+                <th width="74px">13:00</th>
+                <th width="74px">14:00</th>
+                <th width="74px">15:00</th>
+                <th width="74px">16:00</th>
+                <th width="74px">17:00</th>
+                <th width="74px">18:00</th>
+                <th width="74px">19:00</th>
+                <th width="74px">20:00</th>
+                <th width="74px">21:00</th>
+                <th width="74px">22:00</th>
+                <th width="74px">23:00</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let arr of co2Production">
                 <td *ngFor="let element of arr">
-                    {{element}}
+                    {{element | roundNumber : 1}}
                 </td>
             </tr>
         </tbody>
