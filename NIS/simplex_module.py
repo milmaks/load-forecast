@@ -1,7 +1,6 @@
-from pulp import *
+import cplex
 from graph_aproximation_module import Aproximation
-from scipy.optimize import linprog
-import time
+from pulp import *
 
 class Simplex():
     def __init__(self):
@@ -12,6 +11,7 @@ class Simplex():
         self.hydro_generators = None
         self.fuel_criteria = None
         self.co2_criteria = None
+        self.last_hour_res = [0,0,0,0,0,0,0,0,0]
 
     def prepare(self):
         self.graph_aproximation.calculate_functions(self.coal_generators)
@@ -19,29 +19,14 @@ class Simplex():
 
     def solve(self, target_load, fuel_criteria, co2_criteria):
         self.prepare()
-        self.fuel_criteria = fuel_criteria
-        self.co2_criteria = co2_criteria
+
+        self.fuel_criteria = fuel_criteria * 1.0
+        self.co2_criteria = co2_criteria * 1.0
 
         lower_bounds = [0,0,0,0,0,0,0,0,0]
         finished = False
-        current_res = [0,0,0,0,0,0,0,0,0]
-        
-
-        # while(not finished):
-        #     simplex_res = self.simplex_calculation(target_load, current_res, lower_bounds)
-        #     current_res = simplex_res.x
-        #     finished = True
-
-        #     for index, res in enumerate(current_res):
-        #         if res < 0.75 and res != 0:
-        #             lower_bounds[index] = 0.75
-        #             current_res[index] = 0.75
-        #             finished = False
-            
-        #     finished = finished and simplex_res.success
-        #     time.sleep(2)
-
         sol = []
+
         while(not(finished)):
             sol = self.simplex_calculation(target_load, lower_bounds)
             finished = True
@@ -52,73 +37,7 @@ class Simplex():
 
         return sol
 
-    # def simplex_calculation(self, target_load, dec_variable_guess, lower_bounds):
-    #     c = [
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.coal_generators[0]['name']+'_$_to_MW'](dec_variable_guess[0]) * self.coal_generators[0]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.coal_generators[0]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.coal_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[0])) * self.coal_generators[0]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.coal_generators[1]['name']+'_$_to_MW'](dec_variable_guess[1]) * self.coal_generators[1]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.coal_generators[1]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.coal_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[1])) * self.coal_generators[1]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.coal_generators[2]['name']+'_$_to_MW'](dec_variable_guess[2]) * self.coal_generators[2]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.coal_generators[2]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.coal_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[2])) * self.coal_generators[2]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.coal_generators[3]['name']+'_$_to_MW'](dec_variable_guess[3]) * self.coal_generators[3]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.coal_generators[3]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.coal_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[3])) * self.coal_generators[3]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.gas_generators[0]['name']+'_$_to_MW'](dec_variable_guess[4]) * self.gas_generators[0]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.gas_generators[0]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.gas_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[4])) * self.gas_generators[0]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.gas_generators[1]['name']+'_$_to_MW'](dec_variable_guess[5]) * self.gas_generators[1]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.gas_generators[1]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.gas_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[5])) * self.gas_generators[1]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.gas_generators[2]['name']+'_$_to_MW'](dec_variable_guess[6]) * self.gas_generators[2]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.gas_generators[2]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.gas_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[6])) * self.gas_generators[2]['co2']),
-    #         (self.fuel_criteria*self.graph_aproximation.functions['f'+self.gas_generators[3]['name']+'_$_to_MW'](dec_variable_guess[7]) * self.gas_generators[3]['fuelPrice'] + \
-    #         self.co2_criteria*self.graph_aproximation.functions['f'+self.gas_generators[3]['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+self.gas_generators[0]['name']+'_Co2_to_MW'](dec_variable_guess[7])) * self.gas_generators[3]['co2']),
-    #         (self.hydro_generators[0]['cost'])
-    #     ]
-
-    #     A_eq = [[
-    #         self.coal_generators[0]['power'],
-    #         self.coal_generators[1]['power'],
-    #         self.coal_generators[2]['power'],
-    #         self.coal_generators[3]['power'],
-    #         self.gas_generators[0]['power'],
-    #         self.gas_generators[1]['power'],
-    #         self.gas_generators[2]['power'],
-    #         self.gas_generators[3]['power'],
-    #         self.hydro_generators[0]['power']]
-    #     ]
-
-    #     b_eq = [target_load]
-
-    #     x0_bounds = (lower_bounds[0], 1)
-    #     x1_bounds = (lower_bounds[1], 1)
-    #     x2_bounds = (lower_bounds[2], 1)
-    #     x3_bounds = (lower_bounds[3], 1)
-    #     x4_bounds = (lower_bounds[4], 1)
-    #     x5_bounds = (lower_bounds[5], 1)
-    #     x6_bounds = (lower_bounds[6], 1)
-    #     x7_bounds = (lower_bounds[7], 1)
-    #     x8_bounds = (lower_bounds[8], 1)
-
-    #     bounds = [x0_bounds, x1_bounds, x2_bounds, x3_bounds,
-    #         x4_bounds, x5_bounds, x6_bounds, x7_bounds, x8_bounds]
-
-    #     res = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=bounds, x0=dec_variable_guess,
-    #                 method='revised simplex', options={'maxiter': 5})
-
-    #     print('-----------------------------------------------------------------')
-    #     print(res)
-    #     print(dec_variable_guess)
-    #     print(lower_bounds)
-    #     print('-----------------------------------------------------------------')
-    #     # if res.success:
-    #     #     print(res.success)
-    #     #     print('\033[92m', res.x, '\033[0m')
-    #     #     print(dec_variable_guess)
-    #     #     print(lower_bounds)
-    #     #     print(res.message)
-    #     # else:
-    #     #     print('\033[91m', res.x, '\033[0m')
-    #     #     print(dec_variable_guess)
-    #     #     print(lower_bounds)
-    #     return res
+        #return self.simplex_calculation1(target_load)
 
     def simplex_calculation(self, target_load, lower_bound):
         # Create the 'prob' variable to contain the problem data
@@ -206,3 +125,88 @@ class Simplex():
         # print("objective_function = ", value(prob.objective))
         return ret
 
+    def simplex_calculation1(self, target_load):
+        problem = cplex.Cplex()
+
+        # SELECT SIMPLEX NOT LINEAR PROGRAMING 
+        # (https://www.ibm.com/mysupport/s/question/0D55000005khHueCAE/how-to-configure-cplex-opl-to-use-simplex-method?language=en_US)
+        # (https://www.ibm.com/docs/en/icos/12.8.0.0?topic=parameters-algorithm-continuous-linear-problems)
+        problem.parameters.lpmethod = 1
+
+        # We want to find a minimum of our objective function
+        problem.objective.set_sense(problem.objective.sense.minimize)
+
+        # The names of our variables
+        names = ["c1", "c2", "c3", "c4", "g1", "g2", "g3", "g4", "h1"]
+
+        last_hour_res_index = 0
+        # The obective function. More precisely, the coefficients of the objective
+        # function. Note that we are casting to floats.
+        objective = []
+        for gen in self.coal_generators:
+            value = self.fuel_criteria * self.graph_aproximation.functions['f'+gen['name']+'_$_to_MW'](self.last_hour_res[last_hour_res_index]) * gen['fuelPrice'] +\
+                    self.co2_criteria * self.graph_aproximation.functions['f'+gen['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+gen['name']+'_Co2_to_MW'](self.last_hour_res[last_hour_res_index])) * gen['co2'] * gen['power'] / 1000
+            objective.append(value)
+            last_hour_res_index += 1
+        
+        for gen in self.gas_generators:
+            value = self.fuel_criteria * self.graph_aproximation.functions['f'+gen['name']+'_$_to_MW'](self.last_hour_res[last_hour_res_index]) * gen['fuelPrice'] +\
+                    self.co2_criteria * self.graph_aproximation.functions['f'+gen['name']+'_$_to_Co2'](self.graph_aproximation.functions['f'+gen['name']+'_Co2_to_MW'](self.last_hour_res[last_hour_res_index])) * gen['co2'] * gen['power'] / 1000
+            objective.append(value)
+            last_hour_res_index += 1
+        
+        for gen in self.hydro_generators:
+            objective.append(self.fuel_criteria * gen['cost'])
+
+        # Lower bounds, all zeroes is the default.
+        lower_bounds = [0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75]
+        upper_bounds = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+        types = [problem.variables.type.semi_continuous] * len(names)
+
+        problem.variables.add(obj=objective,
+                            lb=lower_bounds,
+                            ub=upper_bounds,
+                            names=names,
+                            types=types)
+
+        constraint_names = ["const1"]
+
+        # The first constraint is entered by referring to each variable by its name
+        # (which we defined earlier)
+        first_constaint = [
+            ["c1", "c2", "c3", "c4", "g1", "g2", "g3", "g4", "h1"],
+            [self.coal_generators[0]['power'],
+            self.coal_generators[1]['power'],
+            self.coal_generators[2]['power'],
+            self.coal_generators[3]['power'],
+            self.gas_generators[0]['power'],
+            self.gas_generators[1]['power'],
+            self.gas_generators[2]['power'],
+            self.gas_generators[3]['power'],
+            self.hydro_generators[0]['power']
+            ]]
+
+        constraints = [first_constaint]
+
+        # So far we haven't added a right hand side, so we do that now. Note that the
+        # first entry in this list corresponds to the first constraint, and so-on.
+        rhs = [target_load]
+        # We need to enter the senses of the constraints. That is, we need to tell Cplex
+        # whether each constrains should be treated as an upper-limit (≤, denoted "L"
+        # for less-than), a lower limit (≥, denoted "G" for greater than) or an equality
+        # (=, denoted "E" for equality)
+        constraint_senses = ["E"]
+
+        # And add the constraints
+        problem.linear_constraints.add(lin_expr=constraints,
+                                    senses=constraint_senses,
+                                    rhs=rhs,
+                                    names=constraint_names)
+
+
+        # Solve the problem
+        problem.solve()
+
+        # And print the solutions
+        return problem.solution.get_values()

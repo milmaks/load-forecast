@@ -1,3 +1,4 @@
+import { NONE_TYPE } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IgxCategoryXAxisComponent, IgxDataChartComponent, IgxLegendComponent, IgxNumericYAxisComponent, IgxStackedAreaSeriesComponent, IgxStackedFragmentSeriesComponent } from 'igniteui-angular-charts';
@@ -300,6 +301,7 @@ export class OptimizationComponent implements OnInit {
   constructor(private toastr: ToastrService, private service: OptimizationService) { }
 
   files:File[] = [];
+  result: any;
 
   hasUpload(event:any){
     this.files.push(event.target.files[0]);
@@ -320,45 +322,154 @@ export class OptimizationComponent implements OnInit {
       }
     });
 
-    this.chartOptions = {
-      title: {
-      text: "Production"             
-      },
-      animationEnabled: true,
-      axisX: {      
-        //valueFormatString: ""
-      },
-      toolTip: {
-      shared: true,
-      contentFormatter: function (e: any) {
-        var content = '';
-        for (var i = e.entries.length - 1; i >= 0; i--) {
-        content += "<span style ='color:" + e.entries[i].dataSeries.color + "; font-weight: bold;';>" + e.entries[i].dataSeries.name + "</span>:" + e.entries[i].dataPoint.y + "MW";
-        content += "<br/>";
+    this.showGraph = false;
+    this.resetGraph();
+  }
+
+  resetGraph() {
+    if(this.result) {
+
+      this.chartOptions = {
+        title: {
+        text: "Production"             
+        },
+        animationEnabled: true,
+        axisX: {      
+          //valueFormatString: ""
+        },
+        toolTip: {
+        shared: true,
+        contentFormatter: function (e: any) {
+          var content = '';
+          for (var i = e.entries.length - 1; i >= 0; i--) {
+          content += "<span style ='color:" + e.entries[i].dataSeries.color + "; font-weight: bold;';>" + e.entries[i].dataSeries.name + "</span>:" + e.entries[i].dataPoint.y + "MW";
+          content += "<br/>";
+          }
+          return content;
         }
-        return content;
-      }
-      },
-      legend: {
-      cursor: "pointer",
-      itemclick: function(e: any) {
-        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-        e.dataSeries.visible = false;
+        },
+        legend: {
+        cursor: "pointer",
+        itemclick: function(e: any) {
+          if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+          e.dataSeries.visible = false;
+          }
+          else {
+          e.dataSeries.visible = true;
+          }
+          e.chart.render();
         }
-        else {
-        e.dataSeries.visible = true;
-        }
-        e.chart.render();
-      }
-      },
-      data: [
+        },
+        data: [
+          {
+            type: "stackedArea",
+            name: "H1",
+            showInLegend: true,
+            legendMarkerType: "square",
+            markerSize: 0,
+            color: "rgba(0,8,255,.9)",
+            dataPoints: [
+              {x: 0, y: 1},
+              {x: 1, y: 1},
+              {x: 2, y: 1},
+              {x: 3, y: 1 },
+              {x: 4, y: 1 },
+              {x: 5, y: 1 },
+              {x: 6, y: 1 },
+              {x: 7, y: 1 },
+              {x: 8, y: 1},
+              {x: 9, y: 1},
+              {x: 10, y: 1 },
+              {x: 11, y: 1 },
+              {x: 12, y: 1 },
+              {x: 13, y: 1 },
+              {x: 14, y: 1 },
+              {x: 15, y: 1},
+              {x: 16, y: 1},
+              {x: 17, y: 1 },
+              {x: 18, y: 1 },
+              {x: 19, y: 1 },
+              {x: 20, y: 1 },
+              {x: 21, y: 1 },
+              {x: 22, y: 1 },
+              {x: 23, y: 1 }
+              ]
+          },
         {
           type: "stackedArea",
-          name: "H1",
+          name: "C1",
+          showInLegend: true,
+          legendMarkerType: "square",
+          color: "rgba(51, 51, 51,.9)",
+          markerSize: 0,
+          dataPoints: [
+          {x: 0, y: 1},
+          {x: 1, y: 1},
+          {x: 2, y: 1},
+          {x: 3, y: 1 },
+          {x: 4, y: 1 },
+          {x: 5, y: 1 },
+          {x: 6, y: 1 },
+          {x: 7, y: 1 },
+          {x: 8, y: 1},
+          {x: 9, y: 1},
+          {x: 10, y: 1 },
+          {x: 11, y: 1 },
+          {x: 12, y: 1 },
+          {x: 13, y: 1 },
+          {x: 14, y: 1 },
+          {x: 15, y: 1},
+          {x: 16, y: 1},
+          {x: 17, y: 1 },
+          {x: 18, y: 1 },
+          {x: 19, y: 1 },
+          {x: 20, y: 1 },
+          {x: 21, y: 1 },
+          {x: 22, y: 1 },
+          {x: 23, y: 1 }
+          ]
+        },
+        {
+          type: "stackedArea",        
+          name: "C2",
           showInLegend: true,
           legendMarkerType: "square",
           markerSize: 0,
-          color: "rgba(0,8,255,.9)",
+          color: "rgba(77, 77, 77,.9)",
+          dataPoints: [
+            {x: 0, y: 1},
+            {x: 1, y: 1},
+            {x: 2, y: 1},
+            {x: 3, y: 1 },
+            {x: 4, y: 1 },
+            {x: 5, y: 1 },
+            {x: 6, y: 1 },
+            {x: 7, y: 1 },
+            {x: 8, y: 1},
+            {x: 9, y: 1},
+            {x: 10, y: 1 },
+            {x: 11, y: 1 },
+            {x: 12, y: 1 },
+            {x: 13, y: 1 },
+            {x: 14, y: 1 },
+            {x: 15, y: 1},
+            {x: 16, y: 1},
+            {x: 17, y: 1 },
+            {x: 18, y: 1 },
+            {x: 19, y: 1 },
+            {x: 20, y: 1 },
+            {x: 21, y: 1 },
+            {x: 22, y: 1 },
+            {x: 23, y: 1 }
+            ]
+        },            
+        {
+          type: "stackedArea",
+          name: "C3",
+          showInLegend: true,
+          legendMarkerType: "square",
+          markerSize: 0,
+          color: "rgba(102, 102, 102,.9)",
           dataPoints: [
             {x: 0, y: 1},
             {x: 1, y: 1},
@@ -386,376 +497,351 @@ export class OptimizationComponent implements OnInit {
             {x: 23, y: 1 }
             ]
         },
-      {
-        type: "stackedArea",
-        name: "C1",
-        showInLegend: true,
-        legendMarkerType: "square",
-        color: "rgba(51, 51, 51,.9)",
-        markerSize: 0,
-        dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
+        {
+          legendMarkerType: "square",
+          name: "C4",
+          showInLegend: true,
+          type: "stackedArea",
+          markerSize: 0,
+          color: "rgba(128, 128, 128,.9)",
+          dataPoints: [
+            {x: 0, y: 1},
+            {x: 1, y: 1},
+            {x: 2, y: 1},
+            {x: 3, y: 1 },
+            {x: 4, y: 1 },
+            {x: 5, y: 1 },
+            {x: 6, y: 1 },
+            {x: 7, y: 1 },
+            {x: 8, y: 1},
+            {x: 9, y: 1},
+            {x: 10, y: 1 },
+            {x: 11, y: 1 },
+            {x: 12, y: 1 },
+            {x: 13, y: 1 },
+            {x: 14, y: 1 },
+            {x: 15, y: 1},
+            {x: 16, y: 1},
+            {x: 17, y: 1 },
+            {x: 18, y: 1 },
+            {x: 19, y: 1 },
+            {x: 20, y: 1 },
+            {x: 21, y: 1 },
+            {x: 22, y: 1 },
+            {x: 23, y: 1 }
+            ]
+        },
+        {
+          type: "stackedArea",
+          name: "G1",
+          showInLegend: true,
+          legendMarkerType: "square",
+          color: "rgba(0,255,61,.9)",
+          markerSize: 0,
+          dataPoints: [
+          {x: 0, y: 1},
+          {x: 1, y: 1},
+          {x: 2, y: 1},
+          {x: 3, y: 1 },
+          {x: 4, y: 1 },
+          {x: 5, y: 1 },
+          {x: 6, y: 1 },
+          {x: 7, y: 1 },
+          {x: 8, y: 1},
+          {x: 9, y: 1},
+          {x: 10, y: 1 },
+          {x: 11, y: 1 },
+          {x: 12, y: 1 },
+          {x: 13, y: 1 },
+          {x: 14, y: 1 },
+          {x: 15, y: 1},
+          {x: 16, y: 1},
+          {x: 17, y: 1 },
+          {x: 18, y: 1 },
+          {x: 19, y: 1 },
+          {x: 20, y: 1 },
+          {x: 21, y: 1 },
+          {x: 22, y: 1 },
+          {x: 23, y: 1 }
+          ]
+        },
+        {
+          type: "stackedArea",        
+          name: "G2",
+          showInLegend: true,
+          legendMarkerType: "square",
+          markerSize: 0,
+          color: "rgba(0,216,50,.9)",
+          dataPoints: [
+            {x: 0, y: 1},
+            {x: 1, y: 1},
+            {x: 2, y: 1},
+            {x: 3, y: 1 },
+            {x: 4, y: 1 },
+            {x: 5, y: 1 },
+            {x: 6, y: 1 },
+            {x: 7, y: 1 },
+            {x: 8, y: 1},
+            {x: 9, y: 1},
+            {x: 10, y: 1 },
+            {x: 11, y: 1 },
+            {x: 12, y: 1 },
+            {x: 13, y: 1 },
+            {x: 14, y: 1 },
+            {x: 15, y: 1},
+            {x: 16, y: 1},
+            {x: 17, y: 1 },
+            {x: 18, y: 1 },
+            {x: 19, y: 1 },
+            {x: 20, y: 1 },
+            {x: 21, y: 1 },
+            {x: 22, y: 1 },
+            {x: 23, y: 1 }
+            ]
+        },            
+        {
+          type: "stackedArea",
+          name: "G3",
+          showInLegend: true,
+          legendMarkerType: "square",
+          markerSize: 0,
+          color: "rgba(37,196,74,.9)",
+          dataPoints: [
+            {x: 0, y: 1},
+            {x: 1, y: 1},
+            {x: 2, y: 1},
+            {x: 3, y: 1 },
+            {x: 4, y: 1 },
+            {x: 5, y: 1 },
+            {x: 6, y: 1 },
+            {x: 7, y: 1 },
+            {x: 8, y: 1},
+            {x: 9, y: 1},
+            {x: 10, y: 1 },
+            {x: 11, y: 1 },
+            {x: 12, y: 1 },
+            {x: 13, y: 1 },
+            {x: 14, y: 1 },
+            {x: 15, y: 1},
+            {x: 16, y: 1},
+            {x: 17, y: 1 },
+            {x: 18, y: 1 },
+            {x: 19, y: 1 },
+            {x: 20, y: 1 },
+            {x: 21, y: 1 },
+            {x: 22, y: 1 },
+            {x: 23, y: 1 }
+            ]
+        },
+        {
+          legendMarkerType: "square",
+          name: "G4",
+          showInLegend: true,
+          type: "stackedArea",
+          markerSize: 0,
+          color: "rgba(66,255,110,.9)",
+          dataPoints: [
+            {x: 0, y: 1},
+            {x: 1, y: 1},
+            {x: 2, y: 1},
+            {x: 3, y: 1 },
+            {x: 4, y: 1 },
+            {x: 5, y: 1 },
+            {x: 6, y: 1 },
+            {x: 7, y: 1 },
+            {x: 8, y: 1},
+            {x: 9, y: 1},
+            {x: 10, y: 1 },
+            {x: 11, y: 1 },
+            {x: 12, y: 1 },
+            {x: 13, y: 1 },
+            {x: 14, y: 1 },
+            {x: 15, y: 1},
+            {x: 16, y: 1},
+            {x: 17, y: 1 },
+            {x: 18, y: 1 },
+            {x: 19, y: 1 },
+            {x: 20, y: 1 },
+            {x: 21, y: 1 },
+            {x: 22, y: 1 },
+            {x: 23, y: 1 }
+            ]
+        },
+        {
+          type: "stackedArea",
+          name: "S1",
+          showInLegend: true,
+          legendMarkerType: "square",
+          color: "rgba(255,255,0,.9)",
+          markerSize: 0,
+          dataPoints: [
+          {x: 0, y: 1},
+          {x: 1, y: 1},
+          {x: 2, y: 1},
+          {x: 3, y: 1 },
+          {x: 4, y: 1 },
+          {x: 5, y: 1 },
+          {x: 6, y: 1 },
+          {x: 7, y: 1 },
+          {x: 8, y: 1},
+          {x: 9, y: 1},
+          {x: 10, y: 1 },
+          {x: 11, y: 1 },
+          {x: 12, y: 1 },
+          {x: 13, y: 1 },
+          {x: 14, y: 1 },
+          {x: 15, y: 1},
+          {x: 16, y: 1},
+          {x: 17, y: 1 },
+          {x: 18, y: 1 },
+          {x: 19, y: 1 },
+          {x: 20, y: 1 },
+          {x: 21, y: 1 },
+          {x: 22, y: 1 },
+          {x: 23, y: 1 }
+          ]
+        },
+        {
+          type: "stackedArea",        
+          name: "W1",
+          showInLegend: true,
+          legendMarkerType: "square",
+          markerSize: 0,
+          color: "rgba(238,238,238,.9)",
+          dataPoints: [
+            {x: 0, y: 1},
+            {x: 1, y: 1},
+            {x: 2, y: 1},
+            {x: 3, y: 1 },
+            {x: 4, y: 1 },
+            {x: 5, y: 1 },
+            {x: 6, y: 1 },
+            {x: 7, y: 1 },
+            {x: 8, y: 1},
+            {x: 9, y: 1},
+            {x: 10, y: 1 },
+            {x: 11, y: 1 },
+            {x: 12, y: 1 },
+            {x: 13, y: 1 },
+            {x: 14, y: 1 },
+            {x: 15, y: 1},
+            {x: 16, y: 1},
+            {x: 17, y: 1 },
+            {x: 18, y: 1 },
+            {x: 19, y: 1 },
+            {x: 20, y: 1 },
+            {x: 21, y: 1 },
+            {x: 22, y: 1 },
+            {x: 23, y: 1 }
+            ]
+        },
+        {
+          type: "stackedArea",        
+          name: "Missing",
+          showInLegend: true,
+          legendMarkerType: "square",
+          markerSize: 0,
+          color: "rgba(255,0,0,.9)",
+          dataPoints: [
+            {x: 0, y: 0},
+            {x: 1, y: 0},
+            {x: 2, y: 0},
+            {x: 3, y: 0 },
+            {x: 4, y: 0 },
+            {x: 5, y: 0 },
+            {x: 6, y: 0 },
+            {x: 7, y: 0 },
+            {x: 8, y: 0},
+            {x: 9, y: 0},
+            {x: 10, y: 0 },
+            {x: 11, y: 0 },
+            {x: 12, y: 0 },
+            {x: 13, y: 0 },
+            {x: 14, y: 0 },
+            {x: 15, y: 0},
+            {x: 16, y: 0},
+            {x: 17, y: 0 },
+            {x: 18, y: 0 },
+            {x: 19, y: 0 },
+            {x: 20, y: 0 },
+            {x: 21, y: 0 },
+            {x: 22, y: 0 },
+            {x: 23, y: 0 }
+            ]
+        },            
         ]
-      },
-      {
-        type: "stackedArea",        
-        name: "C2",
-        showInLegend: true,
-        legendMarkerType: "square",
-        markerSize: 0,
-        color: "rgba(77, 77, 77,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },            
-      {
-        type: "stackedArea",
-        name: "C3",
-        showInLegend: true,
-        legendMarkerType: "square",
-        markerSize: 0,
-        color: "rgba(102, 102, 102,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },
-      {
-        legendMarkerType: "square",
-        name: "C4",
-        showInLegend: true,
-        type: "stackedArea",
-        markerSize: 0,
-        color: "rgba(128, 128, 128,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },
-      {
-        type: "stackedArea",
-        name: "G1",
-        showInLegend: true,
-        legendMarkerType: "square",
-        color: "rgba(0,255,61,.9)",
-        markerSize: 0,
-        dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-      },
-      {
-        type: "stackedArea",        
-        name: "G2",
-        showInLegend: true,
-        legendMarkerType: "square",
-        markerSize: 0,
-        color: "rgba(0,216,50,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },            
-      {
-        type: "stackedArea",
-        name: "G3",
-        showInLegend: true,
-        legendMarkerType: "square",
-        markerSize: 0,
-        color: "rgba(37,196,74,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },
-      {
-        legendMarkerType: "square",
-        name: "G4",
-        showInLegend: true,
-        type: "stackedArea",
-        markerSize: 0,
-        color: "rgba(66,255,110,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },
-      {
-        type: "stackedArea",
-        name: "S1",
-        showInLegend: true,
-        legendMarkerType: "square",
-        color: "rgba(255,255,0,.9)",
-        markerSize: 0,
-        dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-      },
-      {
-        type: "stackedArea",        
-        name: "W1",
-        showInLegend: true,
-        legendMarkerType: "square",
-        markerSize: 0,
-        color: "rgba(238,238,238,.9)",
-        dataPoints: [
-          {x: 0, y: 1},
-          {x: 1, y: 1},
-          {x: 2, y: 1},
-          {x: 3, y: 1 },
-          {x: 4, y: 1 },
-          {x: 5, y: 1 },
-          {x: 6, y: 1 },
-          {x: 7, y: 1 },
-          {x: 8, y: 1},
-          {x: 9, y: 1},
-          {x: 10, y: 1 },
-          {x: 11, y: 1 },
-          {x: 12, y: 1 },
-          {x: 13, y: 1 },
-          {x: 14, y: 1 },
-          {x: 15, y: 1},
-          {x: 16, y: 1},
-          {x: 17, y: 1 },
-          {x: 18, y: 1 },
-          {x: 19, y: 1 },
-          {x: 20, y: 1 },
-          {x: 21, y: 1 },
-          {x: 22, y: 1 },
-          {x: 23, y: 1 }
-          ]
-      },            
-      ]
-    }
-
-    if(this.showGraph) {
+      }
+      
+      let arr = this.chartOptions['data'][0]['dataPoints'];
       this.result['H1'].forEach((element: number, index: number) => {
-      this.chartOptions['data'][0]['dataPoints'][index]['y'] = element;
+        arr[index]['y'] = element;
       });
+
+      this.chartOptions['data'][0]['dataPoints'] = arr;
+
       this.result['C1'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][1]['dataPoints'][index]['y'] = element;
+        if (element <= this.coalPowerPlant1.power)
+          this.chartOptions['data'][1]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][1]['dataPoints'][index]['y'] = this.coalPowerPlant1.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.coalPowerPlant1.power;
+        }
       });
       this.result['C2'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][2]['dataPoints'][index]['y'] = element;
+        if (element <= this.coalPowerPlant2.power)
+          this.chartOptions['data'][2]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][2]['dataPoints'][index]['y'] = this.coalPowerPlant2.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.coalPowerPlant2.power;
+        }
       });
       this.result['C3'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][3]['dataPoints'][index]['y'] = element;
+        if (element <= this.coalPowerPlant3.power)
+          this.chartOptions['data'][3]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][3]['dataPoints'][index]['y'] = this.coalPowerPlant3.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.coalPowerPlant3.power;
+        }
       });
       this.result['C4'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][4]['dataPoints'][index]['y'] = element;
+        if (element <= this.coalPowerPlant4.power)
+          this.chartOptions['data'][4]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][4]['dataPoints'][index]['y'] = this.coalPowerPlant4.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.coalPowerPlant4.power;
+        }
       });
       this.result['G1'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][5]['dataPoints'][index]['y'] = element;
+        if (element <= this.gasPowerPlant1.power)
+          this.chartOptions['data'][5]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][5]['dataPoints'][index]['y'] = this.gasPowerPlant1.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.gasPowerPlant1.power;
+        }
       });
       this.result['G2'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][6]['dataPoints'][index]['y'] = element;
+        if (element <= this.gasPowerPlant2.power)
+          this.chartOptions['data'][6]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][6]['dataPoints'][index]['y'] = this.gasPowerPlant2.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.gasPowerPlant2.power;
+        }
       });
       this.result['G3'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][7]['dataPoints'][index]['y'] = element;
+        if (element <= this.gasPowerPlant3.power)
+          this.chartOptions['data'][7]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][7]['dataPoints'][index]['y'] = this.gasPowerPlant3.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.gasPowerPlant3.power;
+        }
       });
       this.result['G4'].forEach((element: number, index: number) => {
-        this.chartOptions['data'][8]['dataPoints'][index]['y'] = element;
+        if (element <= this.gasPowerPlant4.power)
+          this.chartOptions['data'][8]['dataPoints'][index]['y'] = element;
+        else {
+          this.chartOptions['data'][8]['dataPoints'][index]['y'] = this.gasPowerPlant4.power;
+          this.chartOptions['data'][11]['dataPoints'][index]['y'] += element - this.gasPowerPlant4.power;
+        }
       });
       this.result['S1'].forEach((element: number, index: number) => {
         this.chartOptions['data'][9]['dataPoints'][index]['y'] = element;
@@ -763,6 +849,7 @@ export class OptimizationComponent implements OnInit {
       this.result['W1'].forEach((element: number, index: number) => {
         this.chartOptions['data'][10]['dataPoints'][index]['y'] = element;
       });
+      this.showGraph = true;
     }
   }
 
@@ -790,8 +877,6 @@ export class OptimizationComponent implements OnInit {
         windGenerators: this.windPowerPlants,
         hydroGenerators: this.hydroPowerPlants
       }
-
-      console.log(optimizationParametes);
       
       this.service.optimize(optimizationParametes).subscribe({
         next: (data) => {
@@ -832,10 +917,8 @@ export class OptimizationComponent implements OnInit {
             });
             this.co2Production.push(arr);
           });
-          console.log(this.fuelExpanditure);
-          console.log(this.co2Production);
           
-          this.showGraph = true;
+          //this.showGraph = true;
           this.ngOnInit();
         },
         error: (error) => {
@@ -850,44 +933,40 @@ export class OptimizationComponent implements OnInit {
 
 
   //graph part
-  result: any;
-
   showGraph = false;
 
   chartOptions = {
-	  title: {
-		text: "Production"             
-	  },
-	  animationEnabled: true,
-	  axisX: {      
-		  //valueFormatString: ""
-	  },
-	  toolTip: {
-		shared: true,
-		contentFormatter: function (e: any) {
+    title: {
+    text: "Production"             
+    },
+    animationEnabled: true,
+    axisX: {      
+      //valueFormatString: ""
+    },
+    toolTip: {
+    shared: true,
+    contentFormatter: function (e: any) {
       var content = '';
-		  // var weekday = ["Sun","Mon", "Tue", "Wed", "Thu","Fri","Sat"];
-		  // var content = weekday[e.entries[0].dataPoint.x.getDay()] + "<br/>";
-		  for (var i = e.entries.length - 1; i >= 0; i--) {
-			content += "<span style ='color:" + e.entries[i].dataSeries.color + "; font-weight: bold;';>" + e.entries[i].dataSeries.name + "</span>:" + e.entries[i].dataPoint.y + "MW";
-			content += "<br/>";
-		  }
-		  return content;
-		}
-	  },
-	  legend: {
-		cursor: "pointer",
-		itemclick: function(e: any) {
-		  if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-			e.dataSeries.visible = false;
-		  }
-		  else {
-			e.dataSeries.visible = true;
-		  }
-		  e.chart.render();
-		}
-	  },
-	  data: [
+      for (var i = e.entries.length - 1; i >= 0; i--) {
+      content += "<span style ='color:" + e.entries[i].dataSeries.color + "; font-weight: bold;';>" + e.entries[i].dataSeries.name + "</span>:" + e.entries[i].dataPoint.y + "MW";
+      content += "<br/>";
+      }
+      return content;
+    }
+    },
+    legend: {
+    cursor: "pointer",
+    itemclick: function(e: any) {
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+      e.dataSeries.visible = false;
+      }
+      else {
+      e.dataSeries.visible = true;
+      }
+      e.chart.render();
+    }
+    },
+    data: [
       {
         type: "stackedArea",
         name: "H1",
@@ -922,320 +1001,48 @@ export class OptimizationComponent implements OnInit {
           {x: 23, y: 1 }
           ]
       },
-		{
-		  type: "stackedArea",
-		  name: "C1",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  color: "rgba(211,19,14,.9)",
-		  markerSize: 0,
-		  dataPoints: [
-			{x: 0, y: 1},
-			{x: 1, y: 1},
-			{x: 2, y: 1},
-			{x: 3, y: 1 },
-			{x: 4, y: 1 },
-			{x: 5, y: 1 },
-			{x: 6, y: 1 },
-      {x: 7, y: 1 },
-			{x: 8, y: 1},
-			{x: 9, y: 1},
-			{x: 10, y: 1 },
-			{x: 11, y: 1 },
-			{x: 12, y: 1 },
-			{x: 13, y: 1 },
-      {x: 14, y: 1 },
-			{x: 15, y: 1},
-			{x: 16, y: 1},
-			{x: 17, y: 1 },
-			{x: 18, y: 1 },
-			{x: 19, y: 1 },
-			{x: 20, y: 1 },
-      {x: 21, y: 1 },
-			{x: 22, y: 1 },
-			{x: 23, y: 1 }
-		  ]
-		},
-		{
-		  type: "stackedArea",        
-		  name: "C2",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  markerSize: 0,
-		  color: "rgba(95,53,87,.9)",
-		  dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-		},            
-		{
-		  type: "stackedArea",
-		  name: "C3",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  markerSize: 0,
-		  color: "rgba(60,84,151,.9)",
-		  dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-		},
-		{
-		  legendMarkerType: "square",
-		  name: "C4",
-		  showInLegend: true,
-		  type: "stackedArea",
-		  markerSize: 0,
-		  color: "rgba(22,115,211,.9)",
-		  dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-		},
     {
-		  type: "stackedArea",
-		  name: "G1",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  color: "rgba(0,255,61,.9)",
-		  markerSize: 0,
-		  dataPoints: [
-			{x: 0, y: 1},
-			{x: 1, y: 1},
-			{x: 2, y: 1},
-			{x: 3, y: 1 },
-			{x: 4, y: 1 },
-			{x: 5, y: 1 },
-			{x: 6, y: 1 },
+      type: "stackedArea",
+      name: "C1",
+      showInLegend: true,
+      legendMarkerType: "square",
+      color: "rgba(51, 51, 51,.9)",
+      markerSize: 0,
+      dataPoints: [
+      {x: 0, y: 1},
+      {x: 1, y: 1},
+      {x: 2, y: 1},
+      {x: 3, y: 1 },
+      {x: 4, y: 1 },
+      {x: 5, y: 1 },
+      {x: 6, y: 1 },
       {x: 7, y: 1 },
-			{x: 8, y: 1},
-			{x: 9, y: 1},
-			{x: 10, y: 1 },
-			{x: 11, y: 1 },
-			{x: 12, y: 1 },
-			{x: 13, y: 1 },
+      {x: 8, y: 1},
+      {x: 9, y: 1},
+      {x: 10, y: 1 },
+      {x: 11, y: 1 },
+      {x: 12, y: 1 },
+      {x: 13, y: 1 },
       {x: 14, y: 1 },
-			{x: 15, y: 1},
-			{x: 16, y: 1},
-			{x: 17, y: 1 },
-			{x: 18, y: 1 },
-			{x: 19, y: 1 },
-			{x: 20, y: 1 },
+      {x: 15, y: 1},
+      {x: 16, y: 1},
+      {x: 17, y: 1 },
+      {x: 18, y: 1 },
+      {x: 19, y: 1 },
+      {x: 20, y: 1 },
       {x: 21, y: 1 },
-			{x: 22, y: 1 },
-			{x: 23, y: 1 }
-		  ]
-		},
-		{
-		  type: "stackedArea",        
-		  name: "G2",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  markerSize: 0,
-		  color: "rgba(0,216,50,.9)",
-		  dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-		},            
-		{
-		  type: "stackedArea",
-		  name: "G3",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  markerSize: 0,
-		  color: "rgba(37,196,74,.9)",
-		  dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-		},
-		{
-		  legendMarkerType: "square",
-		  name: "G4",
-		  showInLegend: true,
-		  type: "stackedArea",
-		  markerSize: 0,
-		  color: "rgba(66,255,110,.9)",
-		  dataPoints: [
-        {x: 0, y: 1},
-        {x: 1, y: 1},
-        {x: 2, y: 1},
-        {x: 3, y: 1 },
-        {x: 4, y: 1 },
-        {x: 5, y: 1 },
-        {x: 6, y: 1 },
-        {x: 7, y: 1 },
-        {x: 8, y: 1},
-        {x: 9, y: 1},
-        {x: 10, y: 1 },
-        {x: 11, y: 1 },
-        {x: 12, y: 1 },
-        {x: 13, y: 1 },
-        {x: 14, y: 1 },
-        {x: 15, y: 1},
-        {x: 16, y: 1},
-        {x: 17, y: 1 },
-        {x: 18, y: 1 },
-        {x: 19, y: 1 },
-        {x: 20, y: 1 },
-        {x: 21, y: 1 },
-        {x: 22, y: 1 },
-        {x: 23, y: 1 }
-        ]
-		},
+      {x: 22, y: 1 },
+      {x: 23, y: 1 }
+      ]
+    },
     {
-		  type: "stackedArea",
-		  name: "S1",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  color: "rgba(255,255,0,.9)",
-		  markerSize: 0,
-		  dataPoints: [
-			{x: 0, y: 1},
-			{x: 1, y: 1},
-			{x: 2, y: 1},
-			{x: 3, y: 1 },
-			{x: 4, y: 1 },
-			{x: 5, y: 1 },
-			{x: 6, y: 1 },
-      {x: 7, y: 1 },
-			{x: 8, y: 1},
-			{x: 9, y: 1},
-			{x: 10, y: 1 },
-			{x: 11, y: 1 },
-			{x: 12, y: 1 },
-			{x: 13, y: 1 },
-      {x: 14, y: 1 },
-			{x: 15, y: 1},
-			{x: 16, y: 1},
-			{x: 17, y: 1 },
-			{x: 18, y: 1 },
-			{x: 19, y: 1 },
-			{x: 20, y: 1 },
-      {x: 21, y: 1 },
-			{x: 22, y: 1 },
-			{x: 23, y: 1 }
-		  ]
-		},
-		{
-		  type: "stackedArea",        
-		  name: "W1",
-		  showInLegend: true,
-		  legendMarkerType: "square",
-		  markerSize: 0,
-		  color: "rgba(238,238,238,.9)",
-		  dataPoints: [
+      type: "stackedArea",        
+      name: "C2",
+      showInLegend: true,
+      legendMarkerType: "square",
+      markerSize: 0,
+      color: "rgba(77, 77, 77,.9)",
+      dataPoints: [
         {x: 0, y: 1},
         {x: 1, y: 1},
         {x: 2, y: 1},
@@ -1261,9 +1068,281 @@ export class OptimizationComponent implements OnInit {
         {x: 22, y: 1 },
         {x: 23, y: 1 }
         ]
-		},            
-	  ]
-	}
+    },            
+    {
+      type: "stackedArea",
+      name: "C3",
+      showInLegend: true,
+      legendMarkerType: "square",
+      markerSize: 0,
+      color: "rgba(102, 102, 102,.9)",
+      dataPoints: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1 },
+        {x: 4, y: 1 },
+        {x: 5, y: 1 },
+        {x: 6, y: 1 },
+        {x: 7, y: 1 },
+        {x: 8, y: 1},
+        {x: 9, y: 1},
+        {x: 10, y: 1 },
+        {x: 11, y: 1 },
+        {x: 12, y: 1 },
+        {x: 13, y: 1 },
+        {x: 14, y: 1 },
+        {x: 15, y: 1},
+        {x: 16, y: 1},
+        {x: 17, y: 1 },
+        {x: 18, y: 1 },
+        {x: 19, y: 1 },
+        {x: 20, y: 1 },
+        {x: 21, y: 1 },
+        {x: 22, y: 1 },
+        {x: 23, y: 1 }
+        ]
+    },
+    {
+      legendMarkerType: "square",
+      name: "C4",
+      showInLegend: true,
+      type: "stackedArea",
+      markerSize: 0,
+      color: "rgba(128, 128, 128,.9)",
+      dataPoints: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1 },
+        {x: 4, y: 1 },
+        {x: 5, y: 1 },
+        {x: 6, y: 1 },
+        {x: 7, y: 1 },
+        {x: 8, y: 1},
+        {x: 9, y: 1},
+        {x: 10, y: 1 },
+        {x: 11, y: 1 },
+        {x: 12, y: 1 },
+        {x: 13, y: 1 },
+        {x: 14, y: 1 },
+        {x: 15, y: 1},
+        {x: 16, y: 1},
+        {x: 17, y: 1 },
+        {x: 18, y: 1 },
+        {x: 19, y: 1 },
+        {x: 20, y: 1 },
+        {x: 21, y: 1 },
+        {x: 22, y: 1 },
+        {x: 23, y: 1 }
+        ]
+    },
+    {
+      type: "stackedArea",
+      name: "G1",
+      showInLegend: true,
+      legendMarkerType: "square",
+      color: "rgba(0,255,61,.9)",
+      markerSize: 0,
+      dataPoints: [
+      {x: 0, y: 1},
+      {x: 1, y: 1},
+      {x: 2, y: 1},
+      {x: 3, y: 1 },
+      {x: 4, y: 1 },
+      {x: 5, y: 1 },
+      {x: 6, y: 1 },
+      {x: 7, y: 1 },
+      {x: 8, y: 1},
+      {x: 9, y: 1},
+      {x: 10, y: 1 },
+      {x: 11, y: 1 },
+      {x: 12, y: 1 },
+      {x: 13, y: 1 },
+      {x: 14, y: 1 },
+      {x: 15, y: 1},
+      {x: 16, y: 1},
+      {x: 17, y: 1 },
+      {x: 18, y: 1 },
+      {x: 19, y: 1 },
+      {x: 20, y: 1 },
+      {x: 21, y: 1 },
+      {x: 22, y: 1 },
+      {x: 23, y: 1 }
+      ]
+    },
+    {
+      type: "stackedArea",        
+      name: "G2",
+      showInLegend: true,
+      legendMarkerType: "square",
+      markerSize: 0,
+      color: "rgba(0,216,50,.9)",
+      dataPoints: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1 },
+        {x: 4, y: 1 },
+        {x: 5, y: 1 },
+        {x: 6, y: 1 },
+        {x: 7, y: 1 },
+        {x: 8, y: 1},
+        {x: 9, y: 1},
+        {x: 10, y: 1 },
+        {x: 11, y: 1 },
+        {x: 12, y: 1 },
+        {x: 13, y: 1 },
+        {x: 14, y: 1 },
+        {x: 15, y: 1},
+        {x: 16, y: 1},
+        {x: 17, y: 1 },
+        {x: 18, y: 1 },
+        {x: 19, y: 1 },
+        {x: 20, y: 1 },
+        {x: 21, y: 1 },
+        {x: 22, y: 1 },
+        {x: 23, y: 1 }
+        ]
+    },            
+    {
+      type: "stackedArea",
+      name: "G3",
+      showInLegend: true,
+      legendMarkerType: "square",
+      markerSize: 0,
+      color: "rgba(37,196,74,.9)",
+      dataPoints: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1 },
+        {x: 4, y: 1 },
+        {x: 5, y: 1 },
+        {x: 6, y: 1 },
+        {x: 7, y: 1 },
+        {x: 8, y: 1},
+        {x: 9, y: 1},
+        {x: 10, y: 1 },
+        {x: 11, y: 1 },
+        {x: 12, y: 1 },
+        {x: 13, y: 1 },
+        {x: 14, y: 1 },
+        {x: 15, y: 1},
+        {x: 16, y: 1},
+        {x: 17, y: 1 },
+        {x: 18, y: 1 },
+        {x: 19, y: 1 },
+        {x: 20, y: 1 },
+        {x: 21, y: 1 },
+        {x: 22, y: 1 },
+        {x: 23, y: 1 }
+        ]
+    },
+    {
+      legendMarkerType: "square",
+      name: "G4",
+      showInLegend: true,
+      type: "stackedArea",
+      markerSize: 0,
+      color: "rgba(66,255,110,.9)",
+      dataPoints: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1 },
+        {x: 4, y: 1 },
+        {x: 5, y: 1 },
+        {x: 6, y: 1 },
+        {x: 7, y: 1 },
+        {x: 8, y: 1},
+        {x: 9, y: 1},
+        {x: 10, y: 1 },
+        {x: 11, y: 1 },
+        {x: 12, y: 1 },
+        {x: 13, y: 1 },
+        {x: 14, y: 1 },
+        {x: 15, y: 1},
+        {x: 16, y: 1},
+        {x: 17, y: 1 },
+        {x: 18, y: 1 },
+        {x: 19, y: 1 },
+        {x: 20, y: 1 },
+        {x: 21, y: 1 },
+        {x: 22, y: 1 },
+        {x: 23, y: 1 }
+        ]
+    },
+    {
+      type: "stackedArea",
+      name: "S1",
+      showInLegend: true,
+      legendMarkerType: "square",
+      color: "rgba(255,255,0,.9)",
+      markerSize: 0,
+      dataPoints: [
+      {x: 0, y: 1},
+      {x: 1, y: 1},
+      {x: 2, y: 1},
+      {x: 3, y: 1 },
+      {x: 4, y: 1 },
+      {x: 5, y: 1 },
+      {x: 6, y: 1 },
+      {x: 7, y: 1 },
+      {x: 8, y: 1},
+      {x: 9, y: 1},
+      {x: 10, y: 1 },
+      {x: 11, y: 1 },
+      {x: 12, y: 1 },
+      {x: 13, y: 1 },
+      {x: 14, y: 1 },
+      {x: 15, y: 1},
+      {x: 16, y: 1},
+      {x: 17, y: 1 },
+      {x: 18, y: 1 },
+      {x: 19, y: 1 },
+      {x: 20, y: 1 },
+      {x: 21, y: 1 },
+      {x: 22, y: 1 },
+      {x: 23, y: 1 }
+      ]
+    },
+    {
+      type: "stackedArea",        
+      name: "W1",
+      showInLegend: true,
+      legendMarkerType: "square",
+      markerSize: 0,
+      color: "rgba(238,238,238,.9)",
+      dataPoints: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1 },
+        {x: 4, y: 1 },
+        {x: 5, y: 1 },
+        {x: 6, y: 1 },
+        {x: 7, y: 1 },
+        {x: 8, y: 1},
+        {x: 9, y: 1},
+        {x: 10, y: 1 },
+        {x: 11, y: 1 },
+        {x: 12, y: 1 },
+        {x: 13, y: 1 },
+        {x: 14, y: 1 },
+        {x: 15, y: 1},
+        {x: 16, y: 1},
+        {x: 17, y: 1 },
+        {x: 18, y: 1 },
+        {x: 19, y: 1 },
+        {x: 20, y: 1 },
+        {x: 21, y: 1 },
+        {x: 22, y: 1 },
+        {x: 23, y: 1 }
+        ]
+    },            
+    ]
+  }
 
 
 }

@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from optimization_module import OptimizationModule
+from optimization_manager import OptimizationModule
 
 
 app = Flask(__name__)

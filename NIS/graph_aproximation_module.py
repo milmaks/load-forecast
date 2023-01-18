@@ -1,5 +1,6 @@
 import functools
 from sre_parse import TYPE_FLAGS
+import time
 import numpy as np
 from scipy.interpolate import UnivariateSpline
 from scipy import optimize
@@ -29,11 +30,11 @@ class Aproximation():
             
 
     def create_linear_function(self, name, array):
-        x = []
-        y = []
+        x = [0]
+        y = [array[0][1]]
         for element in array:
             x.append(element[0])
-            y.append(element[0])
+            y.append(element[1])
 
         f = UnivariateSpline(x,y,k=1,s=0)
         self.functions[name] = f
@@ -44,11 +45,11 @@ class Aproximation():
                 x = 0
             return a * x**2 + b * x + c
         
-        x = []
-        y = []
+        x = [0]
+        y = [array[0][1]]
         for element in array:
             x.append(element[0])
-            y.append(element[0])
+            y.append(element[1])
         x = np.array(x)
         y = np.array(y)
 

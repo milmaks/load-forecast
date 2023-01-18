@@ -197,7 +197,6 @@ class OptimizationModule:
         city = LocationInfo("New York","New York","America/New_York", 40.7527, -73.9772)
         tz = zoneinfo.ZoneInfo("America/New_York")
         dateandtime = datetime.datetime(int(year), int(month), int(day), int(hour))
-        print(dateandtime)
         sun_angle = elevation(city.observer, dateandtime=dateandtime, with_refraction=False)
 
         #s_mod = (solar_radiation * math.sin(sun_angle + panel_angle) / math.sin(sun_angle))
